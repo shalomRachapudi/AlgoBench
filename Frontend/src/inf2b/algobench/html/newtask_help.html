@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+The MIT License
+
+Copyright 2015 eziama.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+<html>
+    <head>
+        <title>New Task Help</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link type="text/css" href="css.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <h1>Quick Help!</h1>
+        <p>This is a quick help on the <strong>New Task</strong> section.</p>
+        <h2>Sorting</h2>
+        <p>
+            Sorting has <strong>Quicksort</strong> and <strong>Heapsort</strong>. You
+            can set the type of distribution that the input values will have, which are
+            <em>random</em>, <em>sorted</em>, <em>reverse-sorted</em>, and <em>repeated values</em>, 
+            Additionally, for <strong>Quicksort</strong> you can set <em>worst-case</em> input too, 
+            as we know that <strong>Quicksort</strong> has a bad worst-case runtime. Note that the
+            input that generates the worst-case is different, depending on the <strong>pivot</strong>
+            type that we select. A good exercise is to work out what these input distributions are, and
+            supply them to <em>AlgoBench</em> to see if it truly is the worst-case distribution. 
+        </p>
+        <h2>Graphs</h2>
+        <p>
+            <strong>BFS</strong> and <strong>DFS</strong> graph algorithms are implemented.
+            In order to run them, one parameter must be fixed and the other varied
+            over the course of execution of the algorithm. The parameter can either be 
+            <strong>number of vertices</strong> or <strong>number of edges</strong>.
+        </p>
+        <p>
+            Fixing number of vertices means the number of edges will range from <strong>initial size</strong>
+            to <strong>final size</strong> in increments of <strong>increment size</strong>, up to a limit
+            less than or equal to a certain number, depending on the number of vertices we set as the fixed
+            parameter.
+        </p>
+        <p>
+            The table below shows the constraints for the different possible kinds of graph. Deriving them is
+            left as an exercise.
+        </p>
+        <br/>
+        <img src="img/graph_table.png" alt="Graph configuration table"/> 
+        <p>
+            <strong>A word about Graphs:</strong> Graph sizes need to be really large (up to tens of millions of
+            edges) to get reasonable running times (above the millisecond range).
+        </p>
+        <p><strong>Size Hints:</strong> To run the graph, a good setting that would
+            be run in reasonable time and yield reasonable results for an undirected, no-self-loops graph is:</p>
+        <br/>
+        <img src="img/graph_params.png" alt="Graph parameter values table"/> 
+
+        <h2>Hashing</h2>
+        <p>Hashing has <strong>"good hash"</strong> and <strong>"bad hash"</strong> functions. Details of the
+            function can be seen by examining the source code. <img width="32" height="32" src="img/wink.png" alt="wink"/>
+        </p>
+        <p>(It's here, just in case: <strong>https://bitbucket.org/prof_zeezy/algobench_b.</strong> Look for <em>Hashing.h</em>)</p>
+        <p>
+            Using <strong>letters</strong> as the keys generates "A", "B", ..., "AA", "AB", etc as the keys.
+            Using <strong>numbers</strong> generates keys from zero (0) up to the size of hash minus one.
+        </p>     
+        <br/>    
+        <hr/>
+        <h2>General Notes</h2>
+        <ul>
+            <li>
+                The maximum value allowed for any parameter is the size of an unsigned 32-bit integer minus one, i.e.
+                2^32 - 1 or 4,294,967,295. No negative values are allowed.
+            </li>
+            <li>
+                For the number of repeats for any step in an algorithm, the maximum is 10 (ten). No negative numbers
+                are allowed.
+            </li>
+        </ul>
+        <br/>
+        <hr/>
+        <p>
+            Cheers!
+        </p>
+        <p><em>&copy;2015 Eziama Ubachukwu</em> and with much love from <em>KK</em></p>
+    </body>
+</html>

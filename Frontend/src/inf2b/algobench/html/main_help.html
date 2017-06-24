@@ -1,0 +1,312 @@
+
+<!-- 
+    Created by Yufen Wang
+    Aug 2016
+-->
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="en-us">
+<title>Algobench Help Page</title>
+<link href="style.css" type=text/css rel=stylesheet>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+</head>
+
+<body>
+<table class="header">
+  <tr>
+    <td width="9%" height="98">
+    	<img border="0" src="img/logo.png" width="98" height="98">
+    </td>
+    <td width="91%">
+    	<h1>Algobench Help Page</h1>
+    </td>
+  </tr>
+</table>
+
+<div class="left">
+	<table class="sidebar" cellspacing="0" cellpadding="6">
+        <tr>
+          <td width="20%">&nbsp;</td>
+          <td width="80%">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="20%" height="32" align="center">
+            <p align="center">
+            	<img border="0" src="strelica.gif" width="15" height="15">
+            </p>
+          </td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-intro" >Introduction</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%" align="center"><img border="0" src="strelica.gif" width="15" height="15"></td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-qs">Quickstart</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%" align="center">
+          	<img border="0" src="strelica.gif" width="15" height="15">
+          </td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-sort">Sort Algorithm</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%" align="center">
+            <p align="center"><img border="0" src="strelica.gif" width="15" height="15"></p>
+          </td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-graph">Graph Algorithm</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%" align="center"><img border="0" src="strelica.gif" width="15" height="15"></td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-hash">Hash Algorithm</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%" align="center">
+            <p align="center"><img border="0" src="strelica.gif" width="15" height="15"></p>
+          </td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-search">Search Algorithm</a></p>
+          </td>
+        </tr>
+        <tr>
+          <td width="20%" align="center">
+            <p align="center"><img border="0" src="strelica.gif" width="15" height="15"></p>
+          </td>
+          <td width="80%">
+            <p align="left"><a href="#" id="btn-comp">Complexity Ref</a></p>
+          </td>
+        </tr>
+  </table>
+</div>
+
+<div class="main">
+  <div id="intro">
+    <h2>Introduction</h2>
+    <p> AlgoBench is a software designed to demonstrate the runtime complexity of some common 
+      algorithms in the light of the "Algorithms and Data Structures" course (Inf2B). It involves configuring and 
+      executing algorithms with large inputs to generate runtimes that underscore the 
+      theoretical complexity of the algorithm. </p>
+    <p> It has two parts: The frontend, written in Java is called <strong>AlgoBench</strong>.
+      That's where users can configure the algorithms to run, and the it handles the 
+      rest, including launching and communicating with the backend to get the task done. 
+      The backend, written in C++, is called <strong>AlgoBench_B</strong>. The C++ backend runs the 
+      algorithms. Also the results are viewed on the frontend. </p>
+    
+    <p>Latest - Version 2.0 (2016):</p>
+    <p>The source code for the frontend can be found here: <br/><strong>https://bitbucket.org/EuphieW/algobench</strong></p>
+    <p>The source code for the backend can be found here: <br/><strong>https://bitbucket.org/EuphieW/algobench_b</strong></p>
+    <p>If you find any issues or bugs, please report here: <br/><strong>https://bitbucket.org/EuphieW/algobench/issues/new</strong></p>
+    
+    <p>Old - Version 1.0 (2015):</p>
+    <p>The source code for the frontend can be found here: <br/><strong>https://bitbucket.org/prof_zeezy/algobench</strong></p>
+    <p>The source code for the backend can be found here: <br/><strong>https://bitbucket.org/prof_zeezy/algobench_b</strong></p>
+    
+  </div>
+  
+  <div id="qstart">
+    <h2>Quickstart</h2>
+    <p>
+        <strong>1.New Task</strong>
+        <br/>
+        <br/>
+        <img src="img/menu_file.png" alt="menubar"/>
+        <br/>
+        From left to right, these buttons are "New Task", "Load Task", "Archive", "Delete" and "Compare". 
+        If you want to create a new task, click the first button and follow the instructions.
+    </p>
+    <p>
+        <strong>2.Excute Task</strong>
+        <br/>
+        <br/>
+        <img src="img/menu_task.png" alt="menubar"/>
+        <br/>
+        The first three buttons are used to excute the task. After creating a new task, simply click the "start" button, then the 
+        task will be excuted at back-end using algobench_b. when excuting finished, you can click the latter three buttons to see 
+        the results, including an overview, a line/bar chart and a table.
+    </p>
+    <p>
+        <strong>3.Compare Tasks</strong>
+        <br/>
+        <br/>
+        Before start comparing, you have to make sure that you have more than two tasks in "Active Task" list.
+        <br/>
+        <img src="img/active_task_list.png" alt="menubar"/>
+        <br/>
+        Then click the "Compare" button
+        <br/>
+        <img src="img/menu_compare.png" alt="menubar"/>
+        <br/>
+        Remember that you can only compare tasks of the same algorithm type (Sort, Graph and Search). Algobench do not support 
+        comparison between Hash functions.
+    </p>
+  </div>
+  
+  <div id="sort">
+    <h2>Sorting</h2>
+    <p>
+        Sorting has <strong>Quicksort</strong>, <strong>Heapsort</strong>, <strong>External Mergesort</strong> and 
+        <strong>Internal Mergesort</strong>. 
+    </p>
+    <p>    
+        You can set the type of distribution that the input values will have, which are
+        <em>random</em>, <em>sorted</em>, <em>reverse-sorted</em>, and <em>repeated values</em>, 
+        Additionally, for <strong>Quicksort</strong> you can set <em>worst-case</em> input too, 
+        as we know that <strong>Quicksort</strong> has a bad worst-case runtime. Note that the
+        input that generates the worst-case is different, depending on the <strong>pivot</strong>
+        type that we select. A good exercise is to work out what these input distributions are, and
+        supply them to <em>AlgoBench</em> to see if it truly is the worst-case distribution. 
+    </p>
+  </div>
+  
+  <div id="graph">
+    <h2>Graph</h2>
+    <p>
+        <strong>BFS</strong> and <strong>DFS</strong> graph algorithms are implemented.
+        In order to run them, one parameter must be fixed and the other varied
+        over the course of execution of the algorithm. The parameter can either be 
+        <strong>number of vertices</strong> or <strong>number of edges</strong>.
+    </p>
+    <p>
+        Fixing number of vertices means the number of edges will range from <strong>initial size</strong>
+        to <strong>final size</strong> in increments of <strong>increment size</strong>, up to a limit
+        less than or equal to a certain number, depending on the number of vertices we set as the fixed
+        parameter.
+    </p>
+    <p>
+        The table below shows the constraints for the different possible kinds of graph. Deriving them is
+        left as an exercise.
+    </p>
+    <br/>
+    <img src="img/graph_table.png" alt="Graph configuration table"/>
+    <p>
+        <strong>A word about Graphs:</strong> Graph sizes need to be really large (up to tens of millions of
+        edges) to get reasonable running times (above the millisecond range).
+    </p>
+    <p><strong>Size Hints:</strong> To run the graph, a good setting that would
+        be run in reasonable time and yield reasonable results for an undirected, no-self-loops graph is:</p>
+    <p>
+        <strong>A word about Graphs:</strong> Graph sizes need to be really large (up to tens of millions of
+        edges) to get reasonable running times (above the millisecond range).
+    </p>
+    <p><strong>Size Hints:</strong> To run the graph, a good setting that would
+        be run in reasonable time and yield reasonable results for an undirected, no-self-loops graph is:
+    </p>
+    <br/>
+    <img src="img/graph_params.png" alt="Graph parameter values table"/> 
+  </div>
+  
+  <div id="hash">
+    <h2>Hashing</h2>
+    <p>
+        Hashing use custom hash function. In function <strong>f(K)=|aK+b| mod N</strong>, users can set their own constants a, b and N.
+        <br/>
+        <img src="img/hashfunc.png" alt="hash"/> 
+    </p>
+    
+  </div>
+  
+  <div id="search">
+    <h2>Search</h2>
+    <p>
+    	Searching has <strong>linear search</strong> and <strong>binary search</strong>.
+    </p>
+    <p>
+    	You can set the input distribution (random and sorted) and the type of the search key (always in array, not in array and random). For 		binary search the only choose you have is sorted input array, the algorithm will not do sorting before searching.  
+    </p>
+  </div>
+  
+  <div id="compexity">
+    <h2>Sorting Compexity Reference</h2>
+    <br/>
+    <img src="img/sort_complexity.png" alt="hash"/>
+    <br/>
+    Source:&nbsp;&nbsp;&nbsp;<a>http://bigocheatsheet.com</a>
+  </div>
+</div>
+
+<script>
+	$("#qstart").hide();
+	$("#sort").hide();
+	$("#graph").hide();
+	$("#hash").hide();
+	$("#search").hide();
+	$("#compexity").hide();
+	
+	$("#btn-intro").click(function(){
+		$("#intro").show();
+		$("#qstart").hide();
+  		$("#sort").hide();
+		$("#graph").hide();
+		$("#hash").hide();
+		$("#search").hide();
+		$("#compexity").hide();
+	});
+	$("#btn-qs").click(function(){
+		$("#intro").hide();
+		$("#qstart").show();
+  		$("#sort").hide();
+		$("#graph").hide();
+		$("#hash").hide();
+		$("#search").hide();
+		$("#compexity").hide();
+	});
+	$("#btn-sort").click(function(){
+		$("#intro").hide();
+		$("#qstart").hide();
+  		$("#sort").show();
+		$("#graph").hide();
+		$("#hash").hide();
+		$("#search").hide();
+		$("#compexity").hide();
+	});
+	$("#btn-graph").click(function(){
+		$("#intro").hide();
+		$("#qstart").hide();
+  		$("#sort").hide();
+		$("#graph").show();
+		$("#hash").hide();
+		$("#search").hide();
+		$("#compexity").hide();
+	});
+	$("#btn-hash").click(function(){
+		$("#intro").hide();
+		$("#qstart").hide();
+  		$("#sort").hide();
+		$("#graph").hide();
+		$("#hash").show();
+		$("#search").hide();
+		$("#compexity").hide();
+	});
+	$("#btn-search").click(function(){
+		$("#intro").hide();
+		$("#qstart").hide();
+  		$("#sort").hide();
+		$("#graph").hide();
+		$("#hash").hide();
+		$("#search").show();
+		$("#compexity").hide();
+	});
+	$("#btn-comp").click(function(){
+		$("#intro").hide();
+		$("#qstart").hide();
+  		$("#sort").hide();
+		$("#graph").hide();
+		$("#hash").hide();
+		$("#search").hide();
+		$("#compexity").show();
+	});
+	
+</script>
+
+</body>
+</html>
