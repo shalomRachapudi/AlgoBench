@@ -14,16 +14,53 @@ void ExternalMergeSort::sort_block()
 {
     for ( int i = 0; i < m_input.size(); i++ ) {
         m_RAM.push_back( m_input.at( i ) );
+    
         if ( m_RAM.size() == m_numLimit || i == m_input.size() - 1 ) {
             m_blockNumber++;
-            std::sort( m_RAM.begin(), m_RAM.end() );
+            
+            m_tmpRAM.resize( m_RAM.size() );
+            mergeSort( m_RAM, m_tmpRAM, 0, m_RAM.size() - 1 );
+                        
             m_tempFile[ 0 ].insert( m_tempFile[ 0 ].end(), m_RAM.begin(), m_RAM.end() );
-            m_RAM.clear();
         }
+        m_RAM.clear();
+        m_tmpRAM.clear();
     }
     m_RAM.clear();
     m_fileToSort = 0;
     m_fileSorted = 1;
+}
+
+void ExternalMergeSort::mergeSort( InputVectorType& RAM, InputVectorType& tmpRAM, int left, int right )
+{
+    if ( right <= left ) 
+        return;
+    
+    int center = left + (right - left) / 2;
+    mergeSort( RAM, tmpRAM, left, center );
+    mergeSort( RAM, tmpRAM, center + 1, right );
+    merge( RAM, tmpRAM, left, center, right );
+}
+
+void ExternalMergeSort::merge( InputVectorType& RAM, InputVectorType& tmpRAM, int left, int center, int right )
+{
+    // copy to tmpRAM[]
+    for ( int temp = left; temp <= right; temp++ ) {
+        tmpRAM[ temp ] = RAM[ temp ];
+    }
+    
+    // merge back 
+    int i = left, j = center + 1;
+    for ( int k = left; k <= right; k++ ) {
+        if ( i > center )
+            RAM[ k ] = tmpRAM[ j++ ];
+        else if ( j > right )
+            RAM[ k ] = tmpRAM[ i++ ];
+        else if ( tmpRAM[ j ] < tmpRAM[ i ] )
+            RAM[ k ] = tmpRAM[ j++ ];
+        else
+            RAM[ k ] = tmpRAM[ i++ ];
+    }
 }
 
 void ExternalMergeSort::merge_RAM()
@@ -147,7 +184,7 @@ void ExternalMergeSort::merge()
 
 void ExternalMergeSort::operator()()
 {
-    std::cout << "[TASKRUNNER] Excuting External Mergesorting..." << std::endl;
+    std::cout << "[TASKRUNNER] Executing External Mergesort" << std::endl;
     
     sort_block();
     merge();

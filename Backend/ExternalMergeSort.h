@@ -12,7 +12,6 @@
 
 namespace inf2b
 {
-
     class ExternalMergeSort 
     {
     private:
@@ -22,6 +21,7 @@ namespace inf2b
         InputVectorType m_RAM_A;
         InputVectorType m_RAM_B;
         InputVectorType m_RAM_C;
+        InputVectorType m_tmpRAM;
         int m_numLimit; //how many elements could fit in RAM
         int m_numLimit_A;
         int m_numLimit_B;
@@ -40,7 +40,20 @@ namespace inf2b
         
         void merge_block(int i);
         
+        /** 
+         * Merge different blocks. It makes use of merge_block(int)
+         */
         void merge();
+        
+        /**
+         * Perform mergesort on a subset of given input
+         */
+        void mergeSort( InputVectorType& RAM, InputVectorType& tmpRAM, int left, int right );
+        
+        /**
+         * merge step for the mergeSort(...)
+         */
+        void merge( InputVectorType& RAM, InputVectorType& tmpRAM, int left, int center, int right );
         
     public:
         ExternalMergeSort( InputVectorType& in, double ram ): m_input( in ) 
