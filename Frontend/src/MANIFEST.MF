@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: lib/xchart-2.5.0.jar lib/AbsoluteLayout.jar lib/beansbinding-1.2.1.jar
+SplashScreen-Image: META-INF/awb_splash_screen.jpg 
