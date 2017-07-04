@@ -194,6 +194,10 @@ public class Task implements Serializable {
         this.allowSelfLoops = allowSelfLoops;
     }
 
+    public int getFixedGraphParam() {
+        return Integer.parseInt( getFixedGraphParam(true) );
+    }
+    
     public String getFixedGraphParam(Boolean asString) {
         if (!asString) {
             return AlgoBench.properties.getProperty(fixedGraphParam.toUpperCase());
@@ -215,7 +219,10 @@ public class Task implements Serializable {
         }
         return algorithmGroup;
     }
-
+    public String getAlgorithmGroup()
+    {
+        return getAlgorithmGroup(true);
+    }
     public void setAlgorithmGroup(String algorithmGroup) {
         this.algorithmGroup = algorithmGroup;
     }
@@ -302,6 +309,10 @@ public class Task implements Serializable {
         this.inputFileName = inputFileName;
     }
 
+    public String getInputDistribution() {
+        return getInputDistribution(true);
+    }
+    
     public String getInputDistribution(boolean asString) {
         if(!asString){
             return AlgoBench.properties.getProperty("INPUT_" + inputDistribution.toUpperCase());
@@ -318,6 +329,10 @@ public class Task implements Serializable {
         this.runTitle = runTitle;
     }
 
+    public String getPivotPosition()
+    {
+        return getPivotPosition(true);
+    }
     public String getPivotPosition(boolean asString) {
         if (!asString) {
             return AlgoBench.properties.getProperty(
@@ -403,6 +418,10 @@ public class Task implements Serializable {
         return result;
     }
     
+    public String getSearchKeyType()
+    {
+        return getSearchKeyType(true);
+    }
     public String getSearchKeyType(Boolean asString) {
         if (!asString) {
             return AlgoBench.properties.getProperty("SEARCH_KEY_" + searchKeyType.toUpperCase());
