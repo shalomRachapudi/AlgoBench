@@ -1345,7 +1345,13 @@ public class EditTaskDialog extends javax.swing.JDialog {
         cancelEditTask = false;
         
         String taskName = task.getTaskID();
-        if (taskNameTextField.getText().equals(taskName)) { // override task if task name is not changed?    
+        if (taskNameTextField.getText().length() <= 0) {
+            String message = "Oops! Task Name cannot be empty.";
+            JOptionPane.showMessageDialog(this, message, "Error: Task Name", JOptionPane.ERROR_MESSAGE);
+            taskNameTextField.setText(task.getTaskID()); // set prev task name in case user forgets
+            return;
+        }
+        else if (taskNameTextField.getText().equals(taskName)) { // override task if task name is not changed?    
             String message = "Override the existing task? If no, please click 'No', and change the 'Task Name' on Edit Task Dialog";
             int result = JOptionPane.showConfirmDialog(this, message,
                     "Confirm Edit Task", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -1356,7 +1362,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 return;
             }
         }
-        else 
+        else   
             task.setOverrideFlag(false);
         
         updateTaskValues();

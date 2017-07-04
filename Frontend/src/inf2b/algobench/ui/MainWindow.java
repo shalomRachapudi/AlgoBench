@@ -158,8 +158,8 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         jButtonCreateTask = new javax.swing.JButton();
         jButtonOpenTask = new javax.swing.JButton();
         jButtonArchiveTask = new javax.swing.JButton();
-        jButtonDeleteTask = new javax.swing.JButton();
         jButtonEditTask = new javax.swing.JButton();
+        jButtonDeleteTask = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButtonCompare = new javax.swing.JButton();
         jPanelExcution = new javax.swing.JPanel();
@@ -225,8 +225,8 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
 
         jPanelCreateTask.setBackground(new java.awt.Color(214, 225, 255));
         jPanelCreateTask.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanelCreateTask.setMinimumSize(new java.awt.Dimension(200, 30));
-        jPanelCreateTask.setPreferredSize(new java.awt.Dimension(260, 40));
+        jPanelCreateTask.setMinimumSize(new java.awt.Dimension(350, 30));
+        jPanelCreateTask.setPreferredSize(new java.awt.Dimension(350, 40));
         jPanelCreateTask.setLayout(new java.awt.BorderLayout());
 
         jToolBarNewTask.setBackground(new java.awt.Color(188, 215, 255));
@@ -317,6 +317,31 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         });
         jToolBarNewTask.add(jButtonArchiveTask);
 
+        jButtonEditTask.setFont(jButtonCreateTask.getFont());
+        jButtonEditTask.setForeground(jButtonCreateTask.getForeground());
+        jButtonEditTask.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/edit_icon.png"))); // NOI18N
+        jButtonEditTask.setToolTipText("Edit Task");
+        jButtonEditTask.setBorderPainted(false);
+        jButtonEditTask.setContentAreaFilled(false);
+        jButtonEditTask.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/edit_icon_disabled.png"))); // NOI18N
+        jButtonEditTask.setEnabled(false);
+        jButtonEditTask.setFocusPainted(false);
+        jButtonEditTask.setFocusable(false);
+        jButtonEditTask.setHorizontalAlignment(jButtonCreateTask.getHorizontalAlignment());
+        jButtonEditTask.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonEditTask.setIconTextGap(0);
+        jButtonEditTask.setMaximumSize(jButtonCreateTask.getMaximumSize());
+        jButtonEditTask.setMinimumSize(jButtonCreateTask.getMinimumSize());
+        jButtonEditTask.setPreferredSize(jButtonCreateTask.getPreferredSize());
+        jButtonEditTask.setVerticalAlignment(jButtonCreateTask.getVerticalAlignment());
+        jButtonEditTask.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonEditTask.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditTaskActionPerformed(evt);
+            }
+        });
+        jToolBarNewTask.add(jButtonEditTask);
+
         jButtonDeleteTask.setFont(jButtonCreateTask.getFont());
         jButtonDeleteTask.setForeground(jButtonCreateTask.getForeground());
         jButtonDeleteTask.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/task_delete.png"))); // NOI18N
@@ -341,29 +366,6 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
             }
         });
         jToolBarNewTask.add(jButtonDeleteTask);
-
-        jButtonEditTask.setFont(jButtonCreateTask.getFont());
-        jButtonEditTask.setForeground(jButtonCreateTask.getForeground());
-        jButtonEditTask.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/edit_icon.png"))); // NOI18N
-        jButtonEditTask.setToolTipText("Edit Task");
-        jButtonEditTask.setBorderPainted(false);
-        jButtonEditTask.setContentAreaFilled(false);
-        jButtonEditTask.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/edit_icon_disabled.png"))); // NOI18N
-        jButtonEditTask.setEnabled(false);
-        jButtonEditTask.setFocusPainted(false);
-        jButtonEditTask.setFocusable(false);
-        jButtonEditTask.setHorizontalAlignment(jButtonCreateTask.getHorizontalAlignment());
-        jButtonEditTask.setIconTextGap(0);
-        jButtonEditTask.setMaximumSize(jButtonCreateTask.getMaximumSize());
-        jButtonEditTask.setMinimumSize(jButtonCreateTask.getMinimumSize());
-        jButtonEditTask.setPreferredSize(jButtonCreateTask.getPreferredSize());
-        jButtonEditTask.setVerticalAlignment(jButtonCreateTask.getVerticalAlignment());
-        jButtonEditTask.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEditTaskActionPerformed(evt);
-            }
-        });
-        jToolBarNewTask.add(jButtonEditTask);
 
         jSeparator3.setMinimumSize(new java.awt.Dimension(11, 2));
         jSeparator3.setPreferredSize(new java.awt.Dimension(11, 2));
