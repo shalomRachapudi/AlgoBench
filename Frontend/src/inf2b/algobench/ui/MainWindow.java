@@ -1375,22 +1375,27 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         jButtonDeleteTask.setEnabled(false);
     }
 
+    /**
+     * Edits selected task
+     */
     private void editTask()
     {
         int rindex = jListRuns.getSelectedIndex();
-        TaskMaster taskMaster = runListModel.get(rindex);
         
-        System.out.println("rIndex ==== " + rindex);
-        EditTaskDialog editTaskDialog = new EditTaskDialog(new JFrame(), true, taskMaster);
+        // get distinct copy object of task master of the task that's being edited
+        TaskMaster taskMaster = new TaskMaster(runListModel.get(rindex)); 
+        EditTaskDialog editTaskDialog = new EditTaskDialog(new JFrame(), true, taskMaster );
         editTaskDialog.pack();
         taskMaster = editTaskDialog.showDialog();
-
+        
         if (taskMaster == null) // if user cancels edit task dialog
             return;
         
-        System.out.println("TM ID ==== " + taskMaster.getTaskID() );
-        // replace existing tasMaster with modified taskMaster
-        runListModel.removeElementAt(rindex);
+        if (taskMaster.getTask().getOverrideFlag()) // override the existing task?
+            runListModel.removeElementAt(rindex);
+
+        // replace existing taskMaster with modified taskMaster
+        // or create a new one if user doesn't want to override it.
         createTask( taskMaster );        
     }
     private void createTask(TaskMaster tm) {

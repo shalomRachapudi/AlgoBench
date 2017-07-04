@@ -27,6 +27,7 @@ import inf2b.algobench.model.TaskMaster;
 import java.awt.CardLayout;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -46,12 +47,16 @@ public class EditTaskDialog extends javax.swing.JDialog {
      */
     public EditTaskDialog(java.awt.Frame parent, boolean modal, TaskMaster tM) {
         super(parent, modal);
+        this.setTitle("Edit Task");
+                
+        // initialize components
         initComponents();
         this.task = tM.getTask();
         this.inputSettingsCardLayout = (CardLayout) inputSettingsPanel.getLayout();
         this.configSettingsCardLayout = (CardLayout) configurationSettingsPanel.getLayout();
         
         setLabelsToExistingTaskValues();
+        
         
         //when jTextFieldRam is set, auto calculate number of elements (External Merge Sort)
         jTextFieldRam.getDocument().addDocumentListener( new DocumentListener()
@@ -234,6 +239,9 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jLabelTextInfo.setText( message );
     }
     
+    /**
+     * Set labels to the parameter values retrieved from the task object
+     */
     private void setLabelsToExistingTaskValues()
     {
         String algoGroup = task.getAlgorithmGroup();
@@ -242,7 +250,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
         /* set task information */
         algorithmGroupLabel.setText( algoGroup );
         algorithmLabel.setText( algoName );
-        taskIDLabel.setText( task.getTaskID() );
+        taskNameTextField.setText( task.getTaskID() );
         
         /* Set input and config settings values */
         switch( algoGroup.toLowerCase() )
@@ -347,15 +355,17 @@ public class EditTaskDialog extends javax.swing.JDialog {
         
     }
     
+    /**
+     * Update task object parameters (values)
+     */
     private void updateTaskValues()
     {
         String algoGroup = task.getAlgorithmGroup();
         String algoName = task.getAlgorithmShortName();
         
-        /* set task information */
-        algorithmGroupLabel.setText( algoGroup );
-        algorithmLabel.setText( algoName );
-        taskIDLabel.setText( task.getTaskID() );
+        // update task ID if user doesn't want to override existing task
+        if (!task.getOverrideFlag()) 
+            task.setTaskID(taskNameTextField.getText().trim());
         
         /* Set input and config settings values */
         switch( algoGroup.toLowerCase() )
@@ -420,6 +430,10 @@ public class EditTaskDialog extends javax.swing.JDialog {
         }
     }
     
+    /**
+     * Show EditTask GUI dialog
+     * @return TaskMaster on success or null if editing a task is cancelled
+     */
     public TaskMaster showDialog()
     {
         this.revalidate();
@@ -429,11 +443,9 @@ public class EditTaskDialog extends javax.swing.JDialog {
         if ( cancelEditTask ) {
             return null;
         }
-        
-        TaskMaster tM = new TaskMaster( task );
-        System.out.println( task.getCommand() );
+
         this.dispose();
-        return tM;
+        return new TaskMaster( task );
     }
 
     /**
@@ -452,7 +464,6 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         algorithmLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        taskIDLabel = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -526,11 +537,20 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jLabel38 = new javax.swing.JLabel();
         jComboBoxNumRepeats = new javax.swing.JComboBox();
         jLabel39 = new javax.swing.JLabel();
+        taskNameTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(550, 480));
+        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        setName("jDialogEditTask"); // NOI18N
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jPanelMain.setMaximumSize(new java.awt.Dimension(550, 450));
-        jPanelMain.setMinimumSize(new java.awt.Dimension(550, 450));
+        jPanelMain.setMaximumSize(new java.awt.Dimension(550, 480));
+        jPanelMain.setMinimumSize(new java.awt.Dimension(550, 480));
         jPanelMain.setPreferredSize(new java.awt.Dimension(500, 450));
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic", 1, 18)); // NOI18N
@@ -547,9 +567,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
         algorithmLabel.setText("NA");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("Task ID:");
-
-        taskIDLabel.setText("NA");
+        jLabel6.setText("Task Name:");
 
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
 
@@ -572,7 +590,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
             }
         });
 
-        editTaskButton.setText("Edit Task");
+        editTaskButton.setText("Done");
         editTaskButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 editTaskButtonMouseClicked(evt);
@@ -629,7 +647,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelSearchInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxSearchKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelSearchKey))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         inputSettingsPanel.add(jPanelSearchInputSettings, "searchInputSettings");
@@ -739,7 +757,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelHashInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
                     .addComponent(jComboBoxHashInputSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         inputSettingsPanel.add(jPanelHashInputSettings, "hashInputSettings");
@@ -1163,6 +1181,14 @@ public class EditTaskDialog extends javax.swing.JDialog {
 
         configurationSettingsPanel.add(jPanelSortAndSearchConfigSettings, "sortAndSearchConfigSettings");
 
+        taskNameTextField.setToolTipText("Edit to Change Task Name");
+        taskNameTextField.setPreferredSize(new java.awt.Dimension(132, 20));
+        taskNameTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taskNameTextFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
         jPanelMain.setLayout(jPanelMainLayout);
         jPanelMainLayout.setHorizontalGroup(
@@ -1183,21 +1209,21 @@ public class EditTaskDialog extends javax.swing.JDialog {
                     .addGroup(jPanelMainLayout.createSequentialGroup()
                         .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addGroup(jPanelMainLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(algorithmGroupLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(algorithmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(taskIDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel3)
                             .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanelMainLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(algorithmGroupLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(algorithmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(taskNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelMainLayout.setVerticalGroup(
@@ -1212,7 +1238,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(algorithmLabel)
                     .addComponent(jLabel6)
-                    .addComponent(taskIDLabel))
+                    .addComponent(taskNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1242,10 +1268,13 @@ public class EditTaskDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
         );
 
+        jPanelMain.getAccessibleContext().setAccessibleName("");
+
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxQSPivotPositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxQSPivotPositionActionPerformed
@@ -1310,10 +1339,26 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private void editTaskButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editTaskButtonMouseClicked
         // TODO add your handling code here:
         /* Update task values on editTask button */
-        System.out.println("In here");
+        
         if ( cancelEditTask == true )
             return;
         cancelEditTask = false;
+        
+        String taskName = task.getTaskID();
+        if (taskNameTextField.getText().equals(taskName)) { // override task if task name is not changed?    
+            String message = "Override the existing task? If no, please click 'No', and change the 'Task Name' on Edit Task Dialog";
+            int result = JOptionPane.showConfirmDialog(this, message,
+                    "Confirm Edit Task", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                task.setOverrideFlag(true);
+            } else {
+                task.setOverrideFlag(false);
+                return;
+            }
+        }
+        else 
+            task.setOverrideFlag(false);
+        
         updateTaskValues();
         this.setVisible( false );
     }//GEN-LAST:event_editTaskButtonMouseClicked
@@ -1323,6 +1368,15 @@ public class EditTaskDialog extends javax.swing.JDialog {
         cancelEditTask = true;
         this.setVisible( false );
     }//GEN-LAST:event_cancelButtonMouseClicked
+
+    private void taskNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskNameTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_taskNameTextFieldActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        cancelEditTask = true;
+    }//GEN-LAST:event_formWindowClosing
 
     
 
@@ -1407,6 +1461,6 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldHashb;
     private javax.swing.JTextField jTextFieldHashn;
     private javax.swing.JTextField jTextFieldRam;
-    private javax.swing.JLabel taskIDLabel;
+    private javax.swing.JTextField taskNameTextField;
     // End of variables declaration//GEN-END:variables
 }
