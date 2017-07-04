@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=AlgoBench
+GenericName=Fundamental Algorithms Workbench
+Comment=Analyze various fundamental algorithms
+Exec=bash -c "java -jar ~/AlgoBench_App/frontEnd/AlgoBench_GUI.jar ~/AlgoBench_App/ ~/AlgoBench_App/backEnd/Algobench_Backend"
+Categories=System;Algorithms;Analysis;
+Icon=/tmp/icon.png
+Terminal=false
