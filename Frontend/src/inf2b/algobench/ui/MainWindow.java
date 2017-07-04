@@ -158,6 +158,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         jButtonCreateTask = new javax.swing.JButton();
         jButtonOpenTask = new javax.swing.JButton();
         jButtonArchiveTask = new javax.swing.JButton();
+        jButtonEditTask = new javax.swing.JButton();
         jButtonDeleteTask = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButtonCompare = new javax.swing.JButton();
@@ -224,8 +225,8 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
 
         jPanelCreateTask.setBackground(new java.awt.Color(214, 225, 255));
         jPanelCreateTask.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanelCreateTask.setMinimumSize(new java.awt.Dimension(200, 30));
-        jPanelCreateTask.setPreferredSize(new java.awt.Dimension(260, 40));
+        jPanelCreateTask.setMinimumSize(new java.awt.Dimension(350, 30));
+        jPanelCreateTask.setPreferredSize(new java.awt.Dimension(350, 40));
         jPanelCreateTask.setLayout(new java.awt.BorderLayout());
 
         jToolBarNewTask.setBackground(new java.awt.Color(188, 215, 255));
@@ -315,6 +316,31 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
             }
         });
         jToolBarNewTask.add(jButtonArchiveTask);
+
+        jButtonEditTask.setFont(jButtonCreateTask.getFont());
+        jButtonEditTask.setForeground(jButtonCreateTask.getForeground());
+        jButtonEditTask.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/edit_icon.png"))); // NOI18N
+        jButtonEditTask.setToolTipText("Edit Task");
+        jButtonEditTask.setBorderPainted(false);
+        jButtonEditTask.setContentAreaFilled(false);
+        jButtonEditTask.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/edit_icon_disabled.png"))); // NOI18N
+        jButtonEditTask.setEnabled(false);
+        jButtonEditTask.setFocusPainted(false);
+        jButtonEditTask.setFocusable(false);
+        jButtonEditTask.setHorizontalAlignment(jButtonCreateTask.getHorizontalAlignment());
+        jButtonEditTask.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButtonEditTask.setIconTextGap(0);
+        jButtonEditTask.setMaximumSize(jButtonCreateTask.getMaximumSize());
+        jButtonEditTask.setMinimumSize(jButtonCreateTask.getMinimumSize());
+        jButtonEditTask.setPreferredSize(jButtonCreateTask.getPreferredSize());
+        jButtonEditTask.setVerticalAlignment(jButtonCreateTask.getVerticalAlignment());
+        jButtonEditTask.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButtonEditTask.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditTaskActionPerformed(evt);
+            }
+        });
+        jToolBarNewTask.add(jButtonEditTask);
 
         jButtonDeleteTask.setFont(jButtonCreateTask.getFont());
         jButtonDeleteTask.setForeground(jButtonCreateTask.getForeground());
@@ -909,6 +935,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
                     setTaskView(null, TaskView.MULTIPLE);
                     resetTaskButtons();
                     jButtonDeleteTask.setEnabled(true);
+                    jButtonEditTask.setEnabled(true);
                 }
                 else {
                     TaskMaster tm = (TaskMaster) jListRuns.getSelectedValue();
@@ -1134,6 +1161,14 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
 //        button.setOpaque(false);
     }//GEN-LAST:event_MenuButtonReleased
 
+    private void jButtonEditTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditTaskActionPerformed
+        // TODO add your handling code here:
+        if (jListRuns.getSelectedIndices().length < 0) //if no task is selected
+            return;
+        
+        editTask();
+    }//GEN-LAST:event_jButtonEditTaskActionPerformed
+
     private void loadArchive(String fileName, boolean absolutePath) {
         if (!absolutePath) {
             fileName = AlgoBench.JarDirectory + File.separator + "saved" + File.separator + fileName + ".ser";
@@ -1253,6 +1288,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         }
         jButtonTaskOverview.setEnabled(true);
         jButtonDeleteTask.setEnabled(true);
+        jButtonEditTask.setEnabled(true);
         jButtonArchiveTask.setEnabled(true);
         switch (tm.getState()) {
             case QUEUED:
@@ -1341,7 +1377,31 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         jButtonDeleteTask.setEnabled(false);
     }
 
+    /**
+     * Edits selected task
+     */
+    private void editTask()
+    {
+        int rindex = jListRuns.getSelectedIndex();
+        
+        // get distinct copy object of task master of the task that's being edited
+        TaskMaster taskMaster = new TaskMaster(runListModel.get(rindex)); 
+        EditTaskDialog editTaskDialog = new EditTaskDialog(new JFrame(), true, taskMaster );
+        editTaskDialog.pack();
+        taskMaster = editTaskDialog.showDialog();
+        
+        if (taskMaster == null) // if user cancels edit task dialog
+            return;
+        
+        if (taskMaster.getTask().getOverrideFlag()) // override the existing task?
+            runListModel.removeElementAt(rindex);
+
+        // replace existing taskMaster with modified taskMaster
+        // or create a new one if user doesn't want to override it.
+        createTask( taskMaster );        
+    }
     private void createTask(TaskMaster tm) {
+        
         for (Object id : runListModel.toArray()) {
             if (((TaskMaster) id).getTaskID().equals(tm.getTaskID())) {
                 JOptionPane.showMessageDialog(this, "Task already loaded",
@@ -1349,6 +1409,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
                 return;
             }
         }
+        
         // add task overview panel
         this.jPanelMain.add(tm.getTaskPanel(), tm.getTaskPanelName());
         // draw
@@ -1441,6 +1502,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
     private javax.swing.JButton jButtonCreateTask;
     private javax.swing.JButton jButtonDeleteArchive;
     private javax.swing.JButton jButtonDeleteTask;
+    private javax.swing.JButton jButtonEditTask;
     private javax.swing.JButton jButtonLoadArchive;
     private javax.swing.JButton jButtonOpenTask;
     private javax.swing.JButton jButtonRestart;

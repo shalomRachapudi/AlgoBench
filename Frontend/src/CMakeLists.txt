@@ -60,6 +60,9 @@ set(AlgoBench_UI ${ui_PATH}/CompareChartPanel.form
 				 ${ui_PATH}/SimpleSwingBrowser.java
 				 ${ui_PATH}/TaskOverviewPanel.form
 				 ${ui_PATH}/TaskOverviewPanel.java
+				 ${ui_PATH}/EditTaskDialog.form
+				 ${ui_PATH}/EditTaskDialog.java
+				 ${ui_PATH}/TaskOverviewPanel.java
 				 ${ui_PATH}/components/GraphTaskSubPanel.form
 				 ${ui_PATH}/components/GraphTaskSubPanel.java
 				 ${ui_PATH}/components/HashTaskSubPanel.form

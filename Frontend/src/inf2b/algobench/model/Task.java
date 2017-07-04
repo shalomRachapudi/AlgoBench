@@ -74,6 +74,7 @@ public class Task implements Serializable {
     private boolean graphIsDelayed;
     private String searchKeyType;//custom,always-in,not-in,random
     private int ram;
+    private boolean overrideFlag; // override existing task if (when) edited?
 
     protected Integer status;
     // make it able to fire property changed events
@@ -83,6 +84,51 @@ public class Task implements Serializable {
         this.status = 0;
         this.taskPcs = new PropertyChangeSupport(this);
         this.error = "";
+        this.overrideFlag = false;
+    }
+    
+    /**
+     * Copy constructor to emulate C++ deep copy effect
+     * @param other the task you want to copy
+     */
+    public Task(Task other) {
+        this.status = 0;
+        this.taskPcs = new PropertyChangeSupport(this);
+        this.error = "";
+        this.overrideFlag = false;
+        
+        this.runTitle = other.runTitle;
+        this.algorithmCode = other.algorithmCode;
+        this.algorithm = other.algorithm;
+        this.algorithmGroup = other.algorithmGroup;
+        this.taskID = other.taskID;
+        this.inputStartSize = other.inputStartSize;
+        this.inputStepSize = other.inputStepSize;
+        this.inputFinalSize = other.inputFinalSize;
+        this.inputMinValue = other.inputMinValue;
+        this.inputMaxValue = other.inputMaxValue;
+        this.numRuns = other.numRuns;
+        this.numRepeats = other.numRepeats;
+        this.numCompletedRuns = other.numCompletedRuns;
+        this.inputDistribution = other.inputDistribution;
+        this.error = other.error;
+        this.pivotPosition = other.pivotPosition;
+        this.inputFileName = other.inputFileName;
+        this.dataStructure = other.dataStructure;
+        this.fixedGraphParam = other.fixedGraphParam;
+        this.fixedGraphSize = other.fixedGraphSize;
+        this.isDirectedGraph = other.isDirectedGraph;
+        this.allowSelfLoops = other.allowSelfLoops;
+        this.hashBucketSize = other.hashBucketSize;
+        this.hashKeyType = other.hashKeyType;
+        this.hashFunction_a = other.hashFunction_a;
+        this.hashFunction_b = other.hashFunction_b;
+        this.maxBucketSize = other.maxBucketSize;
+        this.minBucketSize = other.minBucketSize;
+        this.graphIsDelayed = other.graphIsDelayed;
+        this.searchKeyType = other.searchKeyType;
+        this.ram = other.ram;
+        this.overrideFlag = other.overrideFlag;
     }
 
     public void setTaskID(String taskID) {
@@ -194,6 +240,10 @@ public class Task implements Serializable {
         this.allowSelfLoops = allowSelfLoops;
     }
 
+    public int getFixedGraphParam() {
+        return Integer.parseInt( getFixedGraphParam(true) );
+    }
+    
     public String getFixedGraphParam(Boolean asString) {
         if (!asString) {
             return AlgoBench.properties.getProperty(fixedGraphParam.toUpperCase());
@@ -215,7 +265,10 @@ public class Task implements Serializable {
         }
         return algorithmGroup;
     }
-
+    public String getAlgorithmGroup()
+    {
+        return getAlgorithmGroup(true);
+    }
     public void setAlgorithmGroup(String algorithmGroup) {
         this.algorithmGroup = algorithmGroup;
     }
@@ -236,6 +289,14 @@ public class Task implements Serializable {
         return dataStructure;
     }
 
+    public void setOverrideFlag(boolean flag) {
+        this.overrideFlag = flag;
+    }
+
+    public boolean getOverrideFlag() {
+        return overrideFlag;
+    }
+    
     public void setInputStepSize(Long inputStepSize) {
         if (inputStepSize == 0) {
             this.error += "Please use only non-zero values for step size.\n";
@@ -302,6 +363,10 @@ public class Task implements Serializable {
         this.inputFileName = inputFileName;
     }
 
+    public String getInputDistribution() {
+        return getInputDistribution(true);
+    }
+    
     public String getInputDistribution(boolean asString) {
         if(!asString){
             return AlgoBench.properties.getProperty("INPUT_" + inputDistribution.toUpperCase());
@@ -318,6 +383,10 @@ public class Task implements Serializable {
         this.runTitle = runTitle;
     }
 
+    public String getPivotPosition()
+    {
+        return getPivotPosition(true);
+    }
     public String getPivotPosition(boolean asString) {
         if (!asString) {
             return AlgoBench.properties.getProperty(
@@ -403,6 +472,10 @@ public class Task implements Serializable {
         return result;
     }
     
+    public String getSearchKeyType()
+    {
+        return getSearchKeyType(true);
+    }
     public String getSearchKeyType(Boolean asString) {
         if (!asString) {
             return AlgoBench.properties.getProperty("SEARCH_KEY_" + searchKeyType.toUpperCase());

@@ -360,6 +360,9 @@ public class NewTaskDialog extends JDialog {
         jSeparator3 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        jTextFieldTaskName = new javax.swing.JTextField();
+        jLabel51 = new javax.swing.JLabel();
         jPanelStep2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -488,11 +491,9 @@ public class NewTaskDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Task...");
         setIconImages(AlgoBench.iconImagesList);
-        setMaximumSize(new java.awt.Dimension(800, 500));
         setMinimumSize(new java.awt.Dimension(800, 500));
         setModal(true);
         setName("newTaskDialog"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(800, 550));
         java.awt.GridBagLayout layout = new java.awt.GridBagLayout();
         layout.columnWeights = new double[] {0.0, 1.0};
         layout.rowWeights = new double[] {1.0, 0.0};
@@ -577,7 +578,7 @@ public class NewTaskDialog extends JDialog {
         jPanelSetupContainer.setLayout(new java.awt.CardLayout());
 
         jLabel2.setFont(new java.awt.Font("Yu Gothic", 1, 18)); // NOI18N
-        jLabel2.setText("Step 1 : Choose algorithm");
+        jLabel2.setText("Step 1 : Choose Algorithm");
 
         jComboBoxAlgo.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jComboBoxAlgo.addActionListener(new java.awt.event.ActionListener() {
@@ -700,10 +701,27 @@ public class NewTaskDialog extends JDialog {
         jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel1.setText("Algotithm:");
+        jLabel1.setText("Algorithm:");
 
         jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel4.setText("Click \"Next\" button below to step 2.");
+
+        jLabel44.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel44.setText("Task Name:");
+        jLabel44.setMaximumSize(new java.awt.Dimension(63, 19));
+        jLabel44.setMinimumSize(new java.awt.Dimension(63, 19));
+
+        jTextFieldTaskName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldTaskName.setMaximumSize(new java.awt.Dimension(150, 20));
+        jTextFieldTaskName.setMinimumSize(new java.awt.Dimension(150, 20));
+        jTextFieldTaskName.setPreferredSize(new java.awt.Dimension(150, 20));
+        jTextFieldTaskName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTaskNameActionPerformed(evt);
+            }
+        });
+
+        jLabel51.setText("Note: If the above field is left blank, AlgoBench will generate a unique name for the task");
 
         javax.swing.GroupLayout jPanelStep1Layout = new javax.swing.GroupLayout(jPanelStep1);
         jPanelStep1.setLayout(jPanelStep1Layout);
@@ -714,6 +732,7 @@ public class NewTaskDialog extends JDialog {
                     .addComponent(jSeparator3)
                     .addGroup(jPanelStep1Layout.createSequentialGroup()
                         .addGroup(jPanelStep1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanelOptions1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanelStep1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(jPanelStep1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -721,14 +740,15 @@ public class NewTaskDialog extends JDialog {
                                     .addGroup(jPanelStep1Layout.createSequentialGroup()
                                         .addComponent(jLabel1)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBoxAlgo, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jPanelOptions1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 100, Short.MAX_VALUE)))
+                                        .addComponent(jComboBoxAlgo, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel4)
+                                    .addGroup(jPanelStep1Layout.createSequentialGroup()
+                                        .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jTextFieldTaskName, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel51))))
+                        .addGap(0, 96, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanelStep1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelStep1Layout.setVerticalGroup(
             jPanelStep1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -743,9 +763,14 @@ public class NewTaskDialog extends JDialog {
                     .addComponent(jComboBoxAlgo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanelOptions1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGroup(jPanelStep1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldTaskName, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel51)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel4))
         );
 
         jPanelSetupContainer.add(jPanelStep1, "cardStep1");
@@ -1226,7 +1251,7 @@ public class NewTaskDialog extends JDialog {
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanelOptions2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel10)
                 .addContainerGap())
         );
@@ -2474,6 +2499,10 @@ public class NewTaskDialog extends JDialog {
         displayHelpDialog(s);
     }//GEN-LAST:event_jButtonGraphConfigHelp2ActionPerformed
 
+    private void jTextFieldTaskNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTaskNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTaskNameActionPerformed
+
     private static boolean isCoprime(int u, int v) {
     // If both numbers are even, then they are not coprime.
     if (((u | v) & 1) == 0) return false;
@@ -2953,11 +2982,19 @@ public class NewTaskDialog extends JDialog {
     
     private boolean prepareTask() {
         String algoGroup = jListAlgoType.getSelectedValue().toString().toUpperCase().trim();
+               
+        // task ID or task name
         long tmp = System.currentTimeMillis() % 1000;
-        String id;
-        if(tmp<100)id = "0"+tmp;
-        else id = ""+tmp;
-        task.setTaskID("Task_" + id);
+        String id = jTextFieldTaskName.getText().trim();
+        if (id.equals("")) {
+            if(tmp < 100)
+                id = "0" + tmp;
+            else 
+                id = "" + tmp;
+            id = "Task_" + id;
+        }
+        
+        this.task.setTaskID(id);
         this.task.setAlgorithm(this.jComboBoxAlgo.getSelectedItem().toString());
         this.task.setRunTitle(task.getTaskID() + " (" + task.getAlgorithm() + ")");
         this.task.setAlgorithmGroup(algoGroup);
@@ -3167,6 +3204,7 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
@@ -3174,6 +3212,7 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -3241,6 +3280,7 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JTextField jTextFieldHashb;
     private javax.swing.JTextField jTextFieldHashn;
     private javax.swing.JTextField jTextFieldRam;
+    private javax.swing.JTextField jTextFieldTaskName;
     // End of variables declaration//GEN-END:variables
 
 }
