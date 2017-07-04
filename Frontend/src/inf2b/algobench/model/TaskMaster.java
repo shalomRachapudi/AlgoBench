@@ -25,6 +25,9 @@
 /*
  * Modified by Yufen Wang.
  * 2016
+ *
+ * Modified by Shalom
+ * 2017
  */
 
 
@@ -56,7 +59,7 @@ import javax.swing.JPanel;
  *
  * @author eziama ubachukwu and Yufen Wand
  */
-public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable {
+public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable, Cloneable {
 
     protected final String SERVER_MODE = "0";
     protected final String CLIENT_MODE = "1";
@@ -66,7 +69,7 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
     protected boolean successful;
     protected StringBuilder response;
     protected int responseLineCount;
-    protected Task task;
+    private Task task;
     protected TaskOverviewPanel taskPanel;
     // contains XChartPanel, a 3rd party library that's not serialisable
     // so skip during serialisation and reinitialise later
@@ -85,6 +88,21 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
         this.lastView = TaskView.OVERVIEW;
         this.successful = false;
         this.responseLineCount = 0;
+        init();
+    }
+    
+    /**
+     * Copy constructor to emulate C++ deep copy effect
+     * @param tM the task master you want to copy
+     */
+    public TaskMaster(TaskMaster tM)
+    {
+        this.response = tM.response;
+        this.setState(tM.state);
+        this.task = new Task(tM.task);
+        this.lastView = tM.lastView;
+        this.successful = tM.successful;
+        this.responseLineCount = tM.responseLineCount;
         init();
     }
 
@@ -431,5 +449,4 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
         this.init();
         getResultDisplays();
     }
-
 }
