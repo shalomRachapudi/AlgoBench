@@ -22,12 +22,6 @@
  * THE SOFTWARE.
  */
 
-/*
- * Modified by Yufen Wang.
- * 2016
- */
-
-
 package inf2b.algobench.model;
 
 import inf2b.algobench.main.AlgoBench;
@@ -39,7 +33,7 @@ import java.io.Serializable;
  * Represents a task to be given to the backend. TODO: Make Task abstract or an
  * interface, and create sub-classes: SortTask, GraphTask, SearchTask, HashTask
  *
- * @author eziama ubachukwu and Yufen WANG
+ * @author eziama ubachukwu, Yufen WANG, and Shalom
  */
 public class Task implements Serializable {
 
@@ -75,7 +69,21 @@ public class Task implements Serializable {
     private String searchKeyType;//custom,always-in,not-in,random
     private int ram;
     private boolean overrideFlag; // override existing task if (when) edited?
-
+    private String totalProgress;
+    
+    // For Tree based tasks
+    private String treeSize;
+    private String treeRangeLowerLimit;
+    private String treeRangeUpperLimit;
+    private String treeType;
+    private String dataElement;
+    private boolean insertElement;
+    private boolean searchElement;
+    private boolean deleteElement;  
+    private String memoryFootprint;
+    private String maxRecursionDepth;
+    
+    private String notes;   // for notes to remember - not implemented yet as a functionality
     protected Integer status;
     // make it able to fire property changed events
     PropertyChangeSupport taskPcs;
@@ -85,6 +93,10 @@ public class Task implements Serializable {
         this.taskPcs = new PropertyChangeSupport(this);
         this.error = "";
         this.overrideFlag = false;
+        
+        memoryFootprint = "--";
+        maxRecursionDepth = "--";
+        totalProgress = "0";
     }
     
     /**
@@ -129,6 +141,19 @@ public class Task implements Serializable {
         this.searchKeyType = other.searchKeyType;
         this.ram = other.ram;
         this.overrideFlag = other.overrideFlag;
+        
+        this.treeSize = other.treeSize;
+        this.treeRangeLowerLimit = other.treeRangeLowerLimit;
+        this.treeRangeUpperLimit = other.treeRangeUpperLimit;
+        this.treeType = other.treeType;
+        this.dataElement = other.dataElement;
+        this.insertElement = other.insertElement;
+        this.searchElement = other.searchElement;
+        this.deleteElement = other.deleteElement;
+        
+        this.maxRecursionDepth = other.maxRecursionDepth;
+        this.memoryFootprint = other.memoryFootprint;
+        this.totalProgress = other.totalProgress;
     }
 
     public void setTaskID(String taskID) {
@@ -161,6 +186,16 @@ public class Task implements Serializable {
 
     public void setTaskPcs(PropertyChangeSupport taskPcs) {
         this.taskPcs = taskPcs;
+    }
+    
+    public void setNotes(String s)
+    {
+        notes = s;
+    }
+    
+    public String getNotes()
+    {
+        return notes == null ? "Not implemented ATM" : notes;
     }
 
     public String getAlgorithmCode() {
@@ -197,6 +232,10 @@ public class Task implements Serializable {
         return inputStepSize;
     }
 
+    public String getMaxRecursionDepth()
+    {
+        return maxRecursionDepth;
+    }
     public Integer getNumRepeats() {
         return numRepeats;
     }
@@ -472,6 +511,15 @@ public class Task implements Serializable {
         return result;
     }
     
+    public void setTotalProgress(String progress)
+    {
+        System.out.println("Progress ===== " + progress);
+        totalProgress = progress;
+    }
+    public String getTotalProgress()
+    {
+        return totalProgress;
+    }
     public String getSearchKeyType()
     {
         return getSearchKeyType(true);
@@ -489,6 +537,11 @@ public class Task implements Serializable {
     
     public int getSortRam(){
         return this.ram;
+    }
+    
+    public String getMemoryFootprint()
+    {
+        return memoryFootprint;
     }
     
     public void setSortRam(String ram){
@@ -509,6 +562,53 @@ public class Task implements Serializable {
 
     public void clearErrorLog() {
         this.error = "";
+    }
+   
+    public void setTreeSize(String treeSize)
+    {
+        this.treeSize = treeSize;
+    }
+    
+    public void setTreeRangeLowerLimit(String treeRangeLowerLimit)
+    {
+        this.treeRangeLowerLimit = treeRangeLowerLimit;
+    }
+    
+    public void setTreeRangeUpperLimit(String treeRangeUpperLimit)
+    {
+        this.treeRangeUpperLimit = treeRangeUpperLimit;
+    }
+    
+    public void setTreeType(String treeType)
+    {
+        String temp = treeType.replaceAll("\\s+", "_").toUpperCase();
+        this.treeType = AlgoBench.properties.getProperty(temp);
+    }
+    
+    public String getTreeSize()
+    {
+        return treeSize;
+    }
+    
+    public String getTreeRangeLowerLimit()
+    {
+        return treeRangeLowerLimit;
+    }
+    
+    public String getTreeRangeUpperLimit()
+    {
+        return treeRangeUpperLimit;
+    }
+    
+    public String getTreeRange()
+    {
+        String range = "[" + getTreeRangeLowerLimit() + ", " + getTreeRangeUpperLimit() + "]";
+        return range;
+    }
+    
+    public String getTreeType()
+    {
+        return treeType;
     }
 
     @Override
@@ -557,6 +657,19 @@ public class Task implements Serializable {
             r += "\nINPUT-DISTRIBUTION:" + getInputDistribution(false);
             r += "\nSEARCH-KEY-TYPE:" + getSearchKeyType(false);
         }
+        else if (getAlgorithmGroup().equals("TREE")) {
+            r = "ALGORITHM:" + getAlgorithmCode();
+            r += "\nALGORITHM-GROUP:" + getAlgorithmGroup(false);
+            r += "\nTREE-SIZE:" + getTreeSize();
+            r += "\nTREE-RANGE-LOWER-LIMIT:" + getTreeRangeLowerLimit();
+            r += "\nTREE-RANGE-UPPER-LIMIT:" + getTreeRangeUpperLimit();
+            r += "\nTREE-TYPE:" + getTreeType();
+            r += "\nDATA-ELEMENT:" + getDataElement();
+            r += getInsertOp() ? "\nINSERT-OP:1" : "\nINSERT-OP:0";
+            r += getSearchOp() ? "\nSEARCH-OP:1" : "\nSEARCH-OP:0";
+            r += getDeleteOp() ? "\nDELETE-OP:1" : "\nDELETE-OP:0";
+                
+        }
         r += "\n";
         return r;
     }
@@ -592,5 +705,54 @@ public class Task implements Serializable {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         taskPcs.removePropertyChangeListener(listener);
     }
-
+    
+     public String getDataElement()
+    {
+        return dataElement;
+    }
+    
+    public boolean getInsertOp()
+    {
+        return insertElement;
+    }
+    
+    public boolean getSearchOp()
+    {
+        return searchElement;
+    }
+    
+    public boolean getDeleteOp()
+    {
+        return deleteElement;
+    }
+    
+    public void setDataElement(String element)
+    {
+        dataElement = element;
+    }
+    
+    public void setInsertOp(boolean flag) 
+    {
+        insertElement = flag;
+    }
+    
+    public void setSearchOp(boolean flag)
+    {
+        searchElement = flag;
+    }
+    
+    public void setDeleteOp(boolean flag)
+    {
+        deleteElement = flag;
+    }
+    
+    public void setMemoryFootprint(String s)
+    {
+        memoryFootprint = s;
+    }
+    
+    public void setMaxRecursionDepth(String s)
+    {
+        maxRecursionDepth = s;
+    }
 }

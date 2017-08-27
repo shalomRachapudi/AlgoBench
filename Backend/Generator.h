@@ -41,11 +41,23 @@ namespace inf2b
                                     InputIntType min,
                                     InputIntType max
                                   );
+        
+        /**
+         * Generates random integers without repetition
+         * 
+         * The generated sequence is then shuffled using std::random_shuffle()
+         * to minimize the risk of getting (semi) sorted integer seqence
+         */
+        static void generateUniqueRandom( InputVectorType& input,
+                                          const size_t& size,
+                                          InputIntType min,
+                                          InputIntType max
+                                  );
 
         static void generateRepeated( InputVectorType& input, 
                                       const size_t& size, 
                                       int thId = 0
-                                    );
+                                  );
         
         static void generateSorted( InputVectorType& input,
                                     const size_t& size, 
@@ -57,7 +69,7 @@ namespace inf2b
                                      const size_t& size, 
                                      InputIntType max, 
                                      int thId = 0
-                                   );
+                                  );
         
         /*
          static void generateWorstCaseInput( InputVectorType& input,
@@ -123,6 +135,12 @@ namespace inf2b
                                        const int runNumber,
                                        InputIntType minValue,
                                        InputIntType maxValue
+                                     );
+        static void generateTreeInput( InputVectorType& input,
+                                       const size_t size,
+                                       const InputIntType min,
+                                       const InputIntType max,
+                                       const int treeType
                                      );
     };
 }

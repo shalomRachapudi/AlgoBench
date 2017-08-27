@@ -32,6 +32,7 @@ package inf2b.algobench.ui;
 import inf2b.algobench.main.AlgoBench;
 import inf2b.algobench.main.AlgoBench.TaskView;
 import inf2b.algobench.model.TaskMaster;
+import inf2b.algobench.model.PDFGeneration;
 import inf2b.algobench.util.ListRenderer;
 import inf2b.algobench.util.ITaskCompleteListener;
 import java.awt.CardLayout;
@@ -162,6 +163,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         jButtonDeleteTask = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
         jButtonCompare = new javax.swing.JButton();
+        jButtonGeneratePDF = new javax.swing.JButton();
         jPanelExcution = new javax.swing.JPanel();
         jToolBarCompare = new javax.swing.JToolBar();
         jSeparator5 = new javax.swing.JToolBar.Separator();
@@ -392,6 +394,29 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
             }
         });
         jToolBarNewTask.add(jButtonCompare);
+
+        jButtonGeneratePDF.setFont(jButtonCreateTask.getFont());
+        jButtonGeneratePDF.setForeground(jButtonCreateTask.getForeground());
+        jButtonGeneratePDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/pdf_icon.png"))); // NOI18N
+        jButtonGeneratePDF.setToolTipText("Generate PDF");
+        jButtonGeneratePDF.setBorderPainted(false);
+        jButtonGeneratePDF.setContentAreaFilled(false);
+        jButtonGeneratePDF.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/inf2b/algobench/images/pdf_icon_disabled.png"))); // NOI18N
+        jButtonGeneratePDF.setEnabled(false);
+        jButtonGeneratePDF.setFocusPainted(false);
+        jButtonGeneratePDF.setFocusable(false);
+        jButtonGeneratePDF.setHorizontalAlignment(jButtonCreateTask.getHorizontalAlignment());
+        jButtonGeneratePDF.setIconTextGap(0);
+        jButtonGeneratePDF.setMaximumSize(jButtonCreateTask.getMaximumSize());
+        jButtonGeneratePDF.setMinimumSize(jButtonCreateTask.getMinimumSize());
+        jButtonGeneratePDF.setPreferredSize(jButtonCreateTask.getPreferredSize());
+        jButtonGeneratePDF.setVerticalAlignment(jButtonCreateTask.getVerticalAlignment());
+        jButtonGeneratePDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGeneratePDFActionPerformed(evt);
+            }
+        });
+        jToolBarNewTask.add(jButtonGeneratePDF);
 
         jPanelCreateTask.add(jToolBarNewTask, java.awt.BorderLayout.CENTER);
 
@@ -936,6 +961,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
                     resetTaskButtons();
                     jButtonDeleteTask.setEnabled(true);
                     jButtonEditTask.setEnabled(true);
+                    jButtonGeneratePDF.setEnabled(true);
                 }
                 else {
                     TaskMaster tm = (TaskMaster) jListRuns.getSelectedValue();
@@ -1169,6 +1195,28 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         editTask();
     }//GEN-LAST:event_jButtonEditTaskActionPerformed
 
+    private void jButtonGeneratePDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGeneratePDFActionPerformed
+        // TODO add your handling code here:
+        if (jListRuns.getSelectedIndices().length < 0) { //if no task is selected
+            String message = "Please select a task to generate PDF.";
+            JOptionPane.showMessageDialog(this, message, "Error: Task Name", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // get selected index
+        int rindex = jListRuns.getSelectedIndex();
+        
+        // get the selected task
+        TaskMaster taskMaster = runListModel.get(rindex);
+        
+        // generate
+        PDFGeneration pdf = new PDFGeneration();
+        String absolutePath = pdf.generatePDF(taskMaster);
+        
+        String message = "PDF document is saved at " + absolutePath;
+        JOptionPane.showMessageDialog(this, message, "PDF Output", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButtonGeneratePDFActionPerformed
+
     private void loadArchive(String fileName, boolean absolutePath) {
         if (!absolutePath) {
             fileName = AlgoBench.JarDirectory + File.separator + "saved" + File.separator + fileName + ".ser";
@@ -1289,6 +1337,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         jButtonTaskOverview.setEnabled(true);
         jButtonDeleteTask.setEnabled(true);
         jButtonEditTask.setEnabled(true);
+        jButtonGeneratePDF.setEnabled(true);
         jButtonArchiveTask.setEnabled(true);
         switch (tm.getState()) {
             case QUEUED:
@@ -1503,6 +1552,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
     private javax.swing.JButton jButtonDeleteArchive;
     private javax.swing.JButton jButtonDeleteTask;
     private javax.swing.JButton jButtonEditTask;
+    private javax.swing.JButton jButtonGeneratePDF;
     private javax.swing.JButton jButtonLoadArchive;
     private javax.swing.JButton jButtonOpenTask;
     private javax.swing.JButton jButtonRestart;

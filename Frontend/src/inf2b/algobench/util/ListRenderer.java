@@ -79,6 +79,7 @@ public class ListRenderer extends DefaultListCellRenderer {
                 label.setBackground(new Color(255, 186, 0));
             }
         }
+        
         label.setIcon(this.getImageIcon(tm.getTask().getAlgorithmShortName()));
         label.setText(value.toString() + " [" + tm.getState().toString().toLowerCase() + "]");
         

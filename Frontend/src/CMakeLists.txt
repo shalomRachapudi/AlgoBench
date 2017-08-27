@@ -62,7 +62,6 @@ set(AlgoBench_UI ${ui_PATH}/CompareChartPanel.form
 				 ${ui_PATH}/TaskOverviewPanel.java
 				 ${ui_PATH}/EditTaskDialog.form
 				 ${ui_PATH}/EditTaskDialog.java
-				 ${ui_PATH}/TaskOverviewPanel.java
 				 ${ui_PATH}/components/GraphTaskSubPanel.form
 				 ${ui_PATH}/components/GraphTaskSubPanel.java
 				 ${ui_PATH}/components/HashTaskSubPanel.form
@@ -82,6 +81,7 @@ set(AlgoBench_UTIL
 				 ${util_PATH}/ITaskCompleteListener.java
 				 ${util_PATH}/ITaskCompleteNotifier.java
 				 ${util_PATH}/ITaskSubPanel.java
+				 ${util_PATH}/ITreeSubPanel.java
 				 ${util_PATH}/ListRenderer.java
 				 ${util_PATH}/SmartScroller.java
 				 ${util_PATH}/Util.java
@@ -94,6 +94,70 @@ find_jar(xchart_JAR
 			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
 		)
 
+#find valon-framework Jar lib
+find_jar(avalon_JAR
+			"avalon-framework-4.2.0"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find batik Jar lib
+find_jar(batik_JAR
+			"batik-all-1.7"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find commons-io Jar lib
+find_jar(commons_io_JAR
+			"commons-io-1.3.1"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find commons-logging Jar lib
+find_jar(commons_log_JAR
+			"commons-logging-1.0.4"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find fop Jar lib -- needed for pdf generation
+find_jar(fop_JAR
+			"fop"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find serializer Jar lib
+find_jar(serializer_JAR
+			"serializer-2.7.0"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find xalan Jar lib
+find_jar(xalan_JAR
+			"xalan-2.7.0"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+#find xerces Jar lib
+find_jar(xerces_JAR
+			"xercesImpl-2.7.1"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find xml-apis-1.3.04
+find_jar(xml_JAR
+			"xml-apis-1.3.04"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find xml-apis-ext
+find_jar(xml_ext_JAR
+			"xml-apis-ext-1.3.04"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
+
+#find xmlgraphics
+find_jar(xml_graphics_JAR
+			"xmlgraphics-commons-1.5"
+			PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../lib/"
+		)
 #find AbsoluteLayout Jar lib
 find_jar(absoluteLayout_JAR
 			"AbsoluteLayout"
@@ -117,6 +181,7 @@ message(${xchart_JAR})
 message(${absoluteLayout_JAR})
 message(${beansBinding_JAR})
 message(${netBeansModule_JAR})
+message(${xml_graphics_JAR})
 
 # Create AlgoBench_GUI jar file
 add_jar(AlgoBench_GUI 
@@ -132,6 +197,18 @@ add_jar(AlgoBench_GUI
 			${absoluteLayout_JAR}
 			${beansBinding_JAR}
 			${netBeansModule_JAR}
+			${avalon_JAR}
+			${batik_JAR}
+			${commons_io_JAR}
+			${commons_log_JAR}
+			${fop_JAR}
+			${serializer_JAR}
+			${xalan_JAR}
+			${xerces_JAR}
+			${xml_JAR}
+			${xml_ext_JAR}
+			${xml_graphics_JAR}
+
 		ENTRY_POINT
 			inf2b/algobench/main/AlgoBench
         MANIFEST

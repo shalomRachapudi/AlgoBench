@@ -32,10 +32,12 @@ package inf2b.algobench.ui;
 import inf2b.algobench.ui.components.HashTaskSubPanel;
 import inf2b.algobench.ui.components.SortTaskSubPanel;
 import inf2b.algobench.ui.components.GraphTaskSubPanel;
+import inf2b.algobench.ui.components.TreeTaskSubPanel;
 import inf2b.algobench.main.AlgoBench;
 import inf2b.algobench.model.Task;
 import inf2b.algobench.ui.components.SearchTaskSubPanel;
 import inf2b.algobench.util.ITaskSubPanel;
+import inf2b.algobench.util.ITreeSubPanel;
 import inf2b.algobench.util.SmartScroller;
 import inf2b.algobench.util.Util;
 import java.awt.BorderLayout;
@@ -60,7 +62,9 @@ public class TaskOverviewPanel extends JPanel implements Serializable {
     protected SortTaskSubPanel sortSubPanel;
     protected HashTaskSubPanel hashSubPanel;
     protected SearchTaskSubPanel searchSubPanel;
+    protected TreeTaskSubPanel treeSubPanel;
     protected ITaskSubPanel taskSubPanel;
+    protected ITreeSubPanel treeInterface;
 
     /**
      * Creates new form TaskPanel
@@ -133,19 +137,37 @@ public class TaskOverviewPanel extends JPanel implements Serializable {
                     ((SearchTaskSubPanel) taskSubPanel).setLimitsLabel("Tree height:");
                 }
                 break;
+                
+            case "TREE":
+                treeInterface = new TreeTaskSubPanel();
+                ((TreeTaskSubPanel) treeInterface).setTreeType(task.getTreeType());
+                ((TreeTaskSubPanel) treeInterface).setTreeRange(task.getTreeRange());
+                ((TreeTaskSubPanel) treeInterface).setNumberOfNodes((task.getTreeSize()));
+                ((TreeTaskSubPanel) treeInterface).setTotalMemoryFootprint("0");
+                ((TreeTaskSubPanel) treeInterface).setDataElement(task.getDataElement());
+                
+                break;
             default:
                 break;
         }
-        // no custom input for GRAPH for now
-        if (task.getInputFileName().length() == 0 || task.getAlgorithmGroup(true).equals("GRAPH")) {
-            this.taskSubPanel.setCurrentSize(task.getInputStartSize().toString());
-            this.taskSubPanel.setInitialSize(task.getInputStartSize().toString());
-            this.taskSubPanel.setFinalSize(task.getInputFinalSize().toString());
-            this.taskSubPanel.setStepSize(task.getInputStepSize().toString());
+        
+        /* GUI for tree-based tasks is different. Hence the if condition (below). If it is 
+           a tree-based task, simply insert "(Component) treeInterface" into jPanelTaskDetails*/
+        if (!task.getAlgorithmGroup().equals("TREE")) {
+            // no custom input for GRAPH for now
+            if (task.getInputFileName().length() == 0 || task.getAlgorithmGroup(true).equals("GRAPH")) {
+                this.taskSubPanel.setCurrentSize(task.getInputStartSize().toString());
+                this.taskSubPanel.setInitialSize(task.getInputStartSize().toString());
+                this.taskSubPanel.setFinalSize(task.getInputFinalSize().toString());
+                this.taskSubPanel.setStepSize(task.getInputStepSize().toString());
+            }
+            this.taskSubPanel.setNumTasks(task.getNumRuns().toString());
+            this.taskSubPanel.setMemUsage("0");
+            this.jPanelTaskDetails.add((Component) taskSubPanel);
         }
-        this.taskSubPanel.setNumTasks(task.getNumRuns().toString());
-        this.taskSubPanel.setMemUsage("0");
-        this.jPanelTaskDetails.add((Component) taskSubPanel);
+        else {
+            this.jPanelTaskDetails.add((Component) treeInterface);
+        }
     }
 
     public void startTimer() {
@@ -164,6 +186,27 @@ public class TaskOverviewPanel extends JPanel implements Serializable {
         }
     }
 
+    public String getMemoryWithUnit(String mem)
+    {
+        Double memUsage = Double.parseDouble(mem) / 1024; //KB
+        DecimalFormat df = new DecimalFormat("#");
+        String unit = " KB";
+        if (memUsage > 1024) {
+            memUsage /= 1024;
+            df = new DecimalFormat("#.0");
+            unit = " MB";
+        }
+        return df.format(memUsage) + unit;
+    }
+    
+    public String getTimeinSeconds(String nanoSeconds)
+    {
+        long nS = Long.parseLong(nanoSeconds);
+        Double inSeconds = (double) nS / 1000000000.0;
+        
+        return Double.toString(inSeconds) + " Seconds";
+    }
+    
     public void stopTimer(AlgoBench.TaskState taskState) {
         jLabelCurrentStatus.setText(taskState.toString());
         switch (taskState) {
@@ -183,11 +226,75 @@ public class TaskOverviewPanel extends JPanel implements Serializable {
 
     synchronized public void updateComponents(String newUpdate) {
         String[] parts = newUpdate.split("\t");
+        
+        /* Tree based task panels are different
+           So, check for algo group. If tree? handle them separately
+        */
+        
+        if (task.getAlgorithmGroup().equals("TREE")) {
+            switch (parts[0].toUpperCase()) {
+                case "[MEMPERNODE]":
+                    ((TreeTaskSubPanel) treeInterface).setMemoryPerNode(parts[1]);
+                    break;
+                    
+                case "[NODELEVEL]":
+                    ((TreeTaskSubPanel) treeInterface).setNodeLevel(parts[1]);
+                    break;
+                
+                case "[CURRENTMEMUSAGE]":
+                    String s = getMemoryWithUnit(parts[1]);
+                    ((TreeTaskSubPanel) treeInterface).setTotalMemoryFootprint(s);
+                    task.setMemoryFootprint(s);
+                    break;                
+                
+                case "[INSERTOPTIME]":
+                    ((TreeTaskSubPanel) treeInterface).setInsertionTimeTaken(getTimeinSeconds(parts[1]));
+                    break;        
+                    
+                case "[SEARCHOPTIME]":
+                    ((TreeTaskSubPanel) treeInterface).setSearchTimeTaken(getTimeinSeconds(parts[1]));
+                    break;        
+                    
+                case "[DELETEOPTIME]":
+                    ((TreeTaskSubPanel) treeInterface).setDeletionTimeTaken(getTimeinSeconds(parts[1]));
+                    break;        
+                
+                case "[TOTALPROGRESS]":
+                    task.setTotalProgress(parts[1]);
+                    ((TreeTaskSubPanel) treeInterface).setPercentageCompleted(parts[1]);
+                    break;
+                    
+                case "[STATUS]":
+                    this.jLabelLiveUpdate.setText(parts[1]);
+                    break;
+                    
+                case "[TREEHEIGHT]":
+                    ((TreeTaskSubPanel) treeInterface).setTreeHeight(parts[1]);
+                    break;
+            
+                case "[UPDATETIME]":
+                    System.out.println ("now");
+                    break;
+                    
+                case "[UPDATE]":
+                    this.jTextAreaStreamingOutput.append(parts[1] + "\n");
+                    break;
+                    
+                default:
+                    this.jTextAreaStreamingOutput.append(newUpdate + "\n");
+                    break;
+            }
+            
+            return;
+        }
+        
         switch (parts[0].toUpperCase()) {
             case "[NUMCOMPLETEDRUNS]":
+                task.setNumCompletedRuns(Integer.parseInt(parts[1]));
                 this.taskSubPanel.setNumCompletedTasks(parts[1]);
                 break;
             case "[MAXRECURSION]":
+                task.setMaxRecursionDepth(parts[1]);
                 ((SortTaskSubPanel) taskSubPanel).setLimits(parts[1]);
                 break;
             case "[TREEHEIGHT]":
@@ -200,15 +307,9 @@ public class TaskOverviewPanel extends JPanel implements Serializable {
                 this.jLabelCurrentStatus.setText(parts[1]);
                 break;
             case "[CURRENTMEMUSAGE]":
-                Double memUsage = Double.parseDouble(parts[1]) / 1024; //KB
-                DecimalFormat df = new DecimalFormat("#");
-                String unit = " KB";
-                if (memUsage > 1024) {
-                    memUsage /= 1024;
-                    df = new DecimalFormat("#.0");
-                    unit = " MB";
-                }
-                taskSubPanel.setMemUsage(df.format(memUsage) + unit);
+                String s = getMemoryWithUnit(parts[1]);
+                taskSubPanel.setMemUsage(s);
+                task.setMemoryFootprint(s);
                 break;
             case "[CURRENTINPUTSIZE]":
                 taskSubPanel.setCurrentSize(parts[1]);

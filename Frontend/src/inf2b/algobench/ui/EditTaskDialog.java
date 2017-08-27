@@ -25,6 +25,7 @@ package inf2b.algobench.ui;
 import inf2b.algobench.model.Task;
 import inf2b.algobench.model.TaskMaster;
 import java.awt.CardLayout;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -41,6 +42,9 @@ public class EditTaskDialog extends javax.swing.JDialog {
     boolean cancelEditTask;
     CardLayout inputSettingsCardLayout;
     CardLayout configSettingsCardLayout;
+    int dataElement;
+    private String error;
+    private String taskName;
 
     /**
      * Creates new form EditTaskDialog
@@ -57,6 +61,40 @@ public class EditTaskDialog extends javax.swing.JDialog {
         
         setLabelsToExistingTaskValues();
         
+        // auto update tree basic operations summary when a number is given
+        jTextFieldDataElement.getDocument().addDocumentListener(new DocumentListener(){
+            void updateSummary() {
+                dataElement = 0;
+                try {
+                    dataElement = Integer.parseInt(jTextFieldDataElement.getText());
+                    editTaskButton.setEnabled(true);
+                }
+                catch( java.lang.NumberFormatException ex)
+                {
+                    editTaskButton.setEnabled(false);
+                }
+                int min = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+                int max = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
+                enableInsertOp( (dataElement < min || dataElement > max) ? false : true );
+                updateBasicOpSummary(dataElement);
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) {                
+                updateSummary();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSummary();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSummary();
+            }
+        
+        });
         
         //when jTextFieldRam is set, auto calculate number of elements (External Merge Sort)
         jTextFieldRam.getDocument().addDocumentListener( new DocumentListener()
@@ -349,6 +387,38 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 configSettingsCardLayout.show( configurationSettingsPanel, "hashConfigSettings" );
                 break;
             
+            case "tree":
+                /* set input settings */
+                jComboBoxTreeSize.setSelectedItem(task.getTreeSize());
+                jComboBoxTreeType.setSelectedIndex(Integer.parseInt(task.getTreeType()));
+                jComboBoxLowerLimit.setSelectedItem(task.getTreeRangeLowerLimit());
+                jComboBoxUpperLimit.setSelectedItem(task.getTreeRangeUpperLimit());
+                
+                inputSettingsCardLayout.show( inputSettingsPanel, "treeInputSettings" );
+                
+                /* set config settings */
+                dataElement = Integer.parseInt(task.getDataElement());
+                jTextFieldDataElement.setText(task.getDataElement());
+                jRadioButtonCustomInput.setSelected(true);
+                
+                if (!task.getInsertOp()) {
+                    if (dataElement < Integer.parseInt(task.getTreeRangeLowerLimit()))
+                        jCheckBoxInsertOp.setEnabled(false);
+                    jCheckBoxInsertOp.setSelected(false);
+                }
+                else
+                    jCheckBoxInsertOp.setEnabled(true);
+                
+                if (!task.getSearchOp()) {
+                    jCheckBoxSearchOp.setSelected(false);
+                }
+                
+                if (!task.getDeleteOp()) {
+                    jCheckBoxDeleteOp.setSelected(false);
+                }
+                    
+                configSettingsCardLayout.show( configurationSettingsPanel, "treeConfigSettings" );
+                break;
             default: 
                 break;
         }
@@ -365,7 +435,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
         
         // update task ID if user doesn't want to override existing task
         if (!task.getOverrideFlag()) 
-            task.setTaskID(taskNameTextField.getText().trim());
+            task.setTaskID(taskName);
         
         /* Set input and config settings values */
         switch( algoGroup.toLowerCase() )
@@ -424,7 +494,20 @@ public class EditTaskDialog extends javax.swing.JDialog {
                              );
                 task.setHashBucketSize( Integer.parseInt( jTextFieldHashn.getText() ) );
                 break;
-                
+            
+            case "tree":
+                /* update tree's input & config settings */
+                task.setTreeSize(this.jComboBoxTreeSize.getSelectedItem().toString());
+                task.setTreeRangeLowerLimit(this.jComboBoxLowerLimit.getSelectedItem().toString());
+                task.setTreeRangeUpperLimit(this.jComboBoxUpperLimit.getSelectedItem().toString());
+                task.setTreeType(this.jComboBoxTreeType.getSelectedItem().toString());
+                    
+                // basic operations
+                task.setDataElement(Integer.toString(dataElement));
+                task.setInsertOp(jCheckBoxInsertOp.isSelected());
+                task.setSearchOp(jCheckBoxSearchOp.isSelected());
+                task.setDeleteOp(jCheckBoxDeleteOp.isSelected());
+                break;
             default:
                 break;
         }
@@ -457,6 +540,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupBasicOp = new javax.swing.ButtonGroup();
         jPanelMain = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -505,6 +589,16 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jLabelNumElements = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabelTextInfo = new javax.swing.JLabel();
+        jPanelTreeInputSettings = new javax.swing.JPanel();
+        jComboBoxTreeSize = new javax.swing.JComboBox();
+        jLabelSearchInput1 = new javax.swing.JLabel();
+        jLabelSearchKey1 = new javax.swing.JLabel();
+        jComboBoxLowerLimit = new javax.swing.JComboBox();
+        jLabelSearchInput2 = new javax.swing.JLabel();
+        jComboBoxTreeType = new javax.swing.JComboBox();
+        jLabelSearchInput3 = new javax.swing.JLabel();
+        jComboBoxUpperLimit = new javax.swing.JComboBox();
+        jLabelError = new javax.swing.JLabel();
         configurationSettingsPanel = new javax.swing.JPanel();
         jPanelHashConfigSettings = new javax.swing.JPanel();
         jLabel43 = new javax.swing.JLabel();
@@ -534,10 +628,23 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jLabel31 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        jLabel38 = new javax.swing.JLabel();
         jComboBoxNumRepeats = new javax.swing.JComboBox();
         jLabel39 = new javax.swing.JLabel();
+        jPanelTreeConfigSettings = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        jRadioButtonAlgoGen = new javax.swing.JRadioButton();
+        jRadioButtonCustomInput = new javax.swing.JRadioButton();
+        jToggleTestCase = new javax.swing.JToggleButton();
+        jToggleTestCase.setVisible(false);
+        jTextFieldDataElement = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
+        jCheckBoxInsertOp = new javax.swing.JCheckBox();
+        jCheckBoxSearchOp = new javax.swing.JCheckBox();
+        jCheckBoxDeleteOp = new javax.swing.JCheckBox();
         taskNameTextField = new javax.swing.JTextField();
+
+        buttonGroupBasicOp.add(jRadioButtonAlgoGen);
+        buttonGroupBasicOp.add(jRadioButtonCustomInput);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(580, 480));
@@ -634,7 +741,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelSearchInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jComboBoxSearchKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxSearchInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+<<<<<<< HEAD
+                .addContainerGap(344, Short.MAX_VALUE))
+=======
                 .addContainerGap(304, Short.MAX_VALUE))
+>>>>>>> master
         );
         jPanelSearchInputSettingsLayout.setVerticalGroup(
             jPanelSearchInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -647,7 +758,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelSearchInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxSearchKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelSearchKey))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         inputSettingsPanel.add(jPanelSearchInputSettings, "searchInputSettings");
@@ -678,7 +789,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                             .addComponent(jCheckBoxSelfLoop))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBoxGraphStructure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+<<<<<<< HEAD
+                .addContainerGap(315, Short.MAX_VALUE))
+=======
                 .addContainerGap(275, Short.MAX_VALUE))
+>>>>>>> master
         );
         jPanelGraphLayout.setVerticalGroup(
             jPanelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -686,12 +801,13 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxGraphStructure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelGraphStructure))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBoxSelfLoop)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxDirected)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxSimulateLongVisit))
+                .addComponent(jCheckBoxSimulateLongVisit)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         inputSettingsPanel.add(jPanelGraph, "graphInputSettings");
@@ -710,10 +826,17 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jPanelOtherSortsLayout.setHorizontalGroup(
             jPanelOtherSortsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOtherSortsLayout.createSequentialGroup()
+<<<<<<< HEAD
+                .addContainerGap(78, Short.MAX_VALUE)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBoxSortDistribution, 0, 129, Short.MAX_VALUE)
+=======
                 .addContainerGap(58, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBoxSortDistribution, 0, 109, Short.MAX_VALUE)
+>>>>>>> master
                 .addGap(325, 325, 325))
         );
         jPanelOtherSortsLayout.setVerticalGroup(
@@ -748,7 +871,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addComponent(jLabel25)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBoxHashInputSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+<<<<<<< HEAD
+                .addContainerGap(371, Short.MAX_VALUE))
+=======
                 .addContainerGap(331, Short.MAX_VALUE))
+>>>>>>> master
         );
         jPanelHashInputSettingsLayout.setVerticalGroup(
             jPanelHashInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -757,7 +884,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelHashInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
                     .addComponent(jComboBoxHashInputSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         inputSettingsPanel.add(jPanelHashInputSettings, "hashInputSettings");
@@ -788,7 +915,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelQSInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBoxQSDistribution, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboBoxQSPivotPosition, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+<<<<<<< HEAD
+                .addContainerGap(374, Short.MAX_VALUE))
+=======
                 .addContainerGap(334, Short.MAX_VALUE))
+>>>>>>> master
         );
         jPanelQSInputSettingsLayout.setVerticalGroup(
             jPanelQSInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -856,7 +987,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addComponent(jLabelNumElements)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel11)))
+<<<<<<< HEAD
+                        .addGap(0, 279, Short.MAX_VALUE))
+=======
                         .addGap(0, 239, Short.MAX_VALUE))
+>>>>>>> master
                     .addGroup(jPanelEMSInputSettingsLayout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addGap(41, 41, 41)
@@ -890,6 +1025,98 @@ public class EditTaskDialog extends javax.swing.JDialog {
         );
 
         inputSettingsPanel.add(jPanelEMSInputSettings, "emsInputSettings");
+
+        jComboBoxTreeSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10000", "25000", "50000", "100000" }));
+        jComboBoxTreeSize.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxTreeSize.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxTreeSizeItemStateChanged(evt);
+            }
+        });
+
+        jLabelSearchInput1.setText("Tree Size (N):");
+
+        jLabelSearchKey1.setText("Lower Limit:");
+
+        jComboBoxLowerLimit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "500", "1000", "10000", "25000", "50000", "75000" }));
+        jComboBoxLowerLimit.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxLowerLimit.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxLowerLimitItemStateChanged(evt);
+            }
+        });
+        jComboBoxLowerLimit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLowerLimitActionPerformed(evt);
+            }
+        });
+
+        jLabelSearchInput2.setText("Tree Type:");
+
+        jComboBoxTreeType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rooted Tree", "Left Skewed Tree", "Right Skewed Tree" }));
+        jComboBoxTreeType.setPreferredSize(new java.awt.Dimension(120, 25));
+
+        jLabelSearchInput3.setText("Upper Limit:");
+
+        jComboBoxUpperLimit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10000", "25000", "50000", "75000", "100000" }));
+        jComboBoxUpperLimit.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxUpperLimit.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxUpperLimitItemStateChanged(evt);
+            }
+        });
+
+        jLabelError.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+
+        javax.swing.GroupLayout jPanelTreeInputSettingsLayout = new javax.swing.GroupLayout(jPanelTreeInputSettings);
+        jPanelTreeInputSettings.setLayout(jPanelTreeInputSettingsLayout);
+        jPanelTreeInputSettingsLayout.setHorizontalGroup(
+            jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeInputSettingsLayout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addGroup(jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabelError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelTreeInputSettingsLayout.createSequentialGroup()
+                        .addGroup(jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelSearchInput1)
+                            .addComponent(jLabelSearchKey1))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jComboBoxLowerLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBoxTreeSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanelTreeInputSettingsLayout.createSequentialGroup()
+                                .addComponent(jLabelSearchInput2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jComboBoxTreeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelTreeInputSettingsLayout.createSequentialGroup()
+                                .addComponent(jLabelSearchInput3)
+                                .addGap(28, 28, 28)
+                                .addComponent(jComboBoxUpperLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(123, Short.MAX_VALUE))
+        );
+        jPanelTreeInputSettingsLayout.setVerticalGroup(
+            jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeInputSettingsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelSearchInput1)
+                    .addComponent(jComboBoxTreeSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelSearchInput2)
+                    .addComponent(jComboBoxTreeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3)
+                .addGroup(jPanelTreeInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelSearchInput3)
+                    .addComponent(jComboBoxUpperLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxLowerLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelSearchKey1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelError, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        inputSettingsPanel.add(jPanelTreeInputSettings, "treeInputSettings");
 
         configurationSettingsPanel.setLayout(new java.awt.CardLayout());
 
@@ -929,7 +1156,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                         .addComponent(jLabel41)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+<<<<<<< HEAD
+                .addContainerGap(364, Short.MAX_VALUE))
+=======
                 .addContainerGap(324, Short.MAX_VALUE))
+>>>>>>> master
             .addGroup(jPanelHashConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelHashConfigSettingsLayout.createSequentialGroup()
                     .addGap(178, 178, 178)
@@ -951,16 +1182,16 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelHashConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldHashb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelHashConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldHashn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(jPanelHashConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelHashConfigSettingsLayout.createSequentialGroup()
                     .addGap(49, 49, 49)
                     .addComponent(jLabelHashWarn, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(24, Short.MAX_VALUE)))
+                    .addContainerGap(58, Short.MAX_VALUE)))
         );
 
         configurationSettingsPanel.add(jPanelHashConfigSettings, "hashConfigSettings");
@@ -1046,7 +1277,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addGap(120, 120, 120)
                                 .addComponent(jComboBoxFixedNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jComboBoxFinalSizeGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
+<<<<<<< HEAD
+                .addContainerGap(153, Short.MAX_VALUE))
+=======
                 .addContainerGap(113, Short.MAX_VALUE))
+>>>>>>> master
         );
         jPanelGraphConfigSettingsLayout.setVerticalGroup(
             jPanelGraphConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1111,9 +1346,6 @@ public class EditTaskDialog extends javax.swing.JDialog {
 
         jLabel28.setText("Final Input Size:");
 
-        jLabel38.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
-        jLabel38.setText("If >1, Algobench will calculate average runtime ");
-
         jComboBoxNumRepeats.setEditable(true);
         jComboBoxNumRepeats.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5" }));
         jComboBoxNumRepeats.setName("NUMREPEATS"); // NOI18N
@@ -1146,12 +1378,16 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jComboBoxNumRepeats, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel39))))
+<<<<<<< HEAD
+                .addContainerGap(88, Short.MAX_VALUE))
+=======
                 .addContainerGap(48, Short.MAX_VALUE))
             .addGroup(jPanelSortAndSearchConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelSortAndSearchConfigSettingsLayout.createSequentialGroup()
                     .addGap(268, 268, 268)
                     .addComponent(jLabel38)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+>>>>>>> master
         );
         jPanelSortAndSearchConfigSettingsLayout.setVerticalGroup(
             jPanelSortAndSearchConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1171,15 +1407,114 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelSortAndSearchConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxStepSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(70, Short.MAX_VALUE))
-            .addGroup(jPanelSortAndSearchConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanelSortAndSearchConfigSettingsLayout.createSequentialGroup()
-                    .addGap(139, 139, 139)
-                    .addComponent(jLabel38)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         configurationSettingsPanel.add(jPanelSortAndSearchConfigSettings, "sortAndSearchConfigSettings");
+
+        jLabel30.setText("Data Element:");
+
+        jRadioButtonAlgoGen.setText("Use Algobench-generated data element");
+        jRadioButtonAlgoGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonAlgoGenActionPerformed(evt);
+            }
+        });
+
+        jRadioButtonCustomInput.setText("Use custom input element");
+        jRadioButtonCustomInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonCustomInputActionPerformed(evt);
+            }
+        });
+
+        jToggleTestCase.setSelected(true);
+        jToggleTestCase.setText("Positive Case");
+        jToggleTestCase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleTestCaseActionPerformed(evt);
+            }
+        });
+
+        jLabel17.setText("Summary: The following operations will be performed");
+
+        jCheckBoxInsertOp.setSelected(true);
+        jCheckBoxInsertOp.setText("insert()");
+        jCheckBoxInsertOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxInsertOpActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxSearchOp.setSelected(true);
+        jCheckBoxSearchOp.setText("search()");
+        jCheckBoxSearchOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxSearchOpActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxDeleteOp.setSelected(true);
+        jCheckBoxDeleteOp.setText("delete()");
+        jCheckBoxDeleteOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDeleteOpActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelTreeConfigSettingsLayout = new javax.swing.GroupLayout(jPanelTreeConfigSettings);
+        jPanelTreeConfigSettings.setLayout(jPanelTreeConfigSettingsLayout);
+        jPanelTreeConfigSettingsLayout.setHorizontalGroup(
+            jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
+                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
+                                .addComponent(jLabel30)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextFieldDataElement, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
+                                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jRadioButtonCustomInput)
+                                    .addComponent(jRadioButtonAlgoGen))
+                                .addGap(38, 38, 38)
+                                .addComponent(jToggleTestCase))))
+                    .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
+                        .addGap(64, 64, 64)
+                        .addComponent(jCheckBoxInsertOp, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(jCheckBoxSearchOp, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(jCheckBoxDeleteOp, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(96, Short.MAX_VALUE))
+        );
+        jPanelTreeConfigSettingsLayout.setVerticalGroup(
+            jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonAlgoGen)
+                    .addComponent(jToggleTestCase))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonCustomInput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDataElement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxInsertOp)
+                    .addComponent(jCheckBoxSearchOp)
+                    .addComponent(jCheckBoxDeleteOp))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        configurationSettingsPanel.add(jPanelTreeConfigSettings, "treeConfigSettings");
 
         taskNameTextField.setToolTipText("Edit to Change Task Name");
         taskNameTextField.setPreferredSize(new java.awt.Dimension(132, 20));
@@ -1240,17 +1575,17 @@ public class EditTaskDialog extends javax.swing.JDialog {
                     .addComponent(jLabel6)
                     .addComponent(taskNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addGap(4, 4, 4)
-                .addComponent(inputSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inputSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(configurationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(configurationSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
@@ -1264,11 +1599,15 @@ public class EditTaskDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+<<<<<<< HEAD
+            .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
+=======
             .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+>>>>>>> master
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
         );
 
         jPanelMain.getAccessibleContext().setAccessibleName("");
@@ -1353,17 +1692,37 @@ public class EditTaskDialog extends javax.swing.JDialog {
         }
         else if (taskNameTextField.getText().equals(taskName)) { // override task if task name is not changed?    
             String message = "Override the existing task? If no, please click 'No', and change the 'Task Name' on Edit Task Dialog";
-            int result = JOptionPane.showConfirmDialog(this, message,
-                    "Confirm Edit Task", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (result == JOptionPane.YES_OPTION) {
+            String[] options = {"Yes", "No", "Cancel"};
+            int result = JOptionPane.showOptionDialog(this, message,
+                    "Confirm Edit Task", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                    null, options, options[0]);
+            if (result == 0) {
                 task.setOverrideFlag(true);
-            } else {
+            }
+            else if (result == 1) { //generate a new name
+               task.setOverrideFlag(false);
+               
+               // task ID or task name
+                long tmp = System.currentTimeMillis() % 1000;
+                String id = "";
+                if (id.equals("")) {
+                    if(tmp < 100)
+                        id = "0" + tmp;
+                    else 
+                        id = "" + tmp;
+                    this.taskName = task.getAlgorithm().toLowerCase() + "_" + id;
+                }
+            }
+            else {
                 task.setOverrideFlag(false);
                 return;
             }
         }
-        else   
+        else   {
+            this.taskName = taskNameTextField.getText().trim();
             task.setOverrideFlag(false);
+        }
+            
         
         updateTaskValues();
         this.setVisible( false );
@@ -1384,16 +1743,196 @@ public class EditTaskDialog extends javax.swing.JDialog {
         cancelEditTask = true;
     }//GEN-LAST:event_formWindowClosing
 
+    private void jComboBoxLowerLimitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLowerLimitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxLowerLimitActionPerformed
+
+    private void jRadioButtonAlgoGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonAlgoGenActionPerformed
+        // TODO add your handling code here:
+                // TODO add your handling code here:
+         if (jRadioButtonAlgoGen.isSelected()) {
+            jToggleTestCase.setVisible(true);
+            jTextFieldDataElement.setText("");
+            jTextFieldDataElement.setEnabled(false);
+            editTaskButton.setEnabled(true);
+            
+            // get a random integer 
+            dataElement = generateDataElement(jToggleTestCase.isSelected());
+            
+            // update summary and data element?
+            updateBasicOpSummary(dataElement);
+        }
+
+    }//GEN-LAST:event_jRadioButtonAlgoGenActionPerformed
+
+    private int generateDataElement(boolean flag)
+    {
+        // handle insertOp case: disable it if flag == false
+        enableInsertOp(flag);
+        Random r = new Random();
+        int min = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+        int max = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
+        if (!flag) { // negative test case
+            return min - r.nextInt(100);
+        }
+        return r.nextInt((max - min) + 1) + min; // positive test case
+    }
     
+    /**
+     * Enables jCheckBoxInsertOp based on given boolean flag
+     * 
+     * This method enables/disables insert operation based on +ve/-ve test case.
+     * insert operation is not supported for negative test case
+     *
+     * @param flag true if positive test case. False otherwise
+     */
+    private void enableInsertOp(boolean flag)
+    {
+        jCheckBoxInsertOp.setSelected(flag);
+        jCheckBoxInsertOp.setEnabled(flag);
+    }
+    private void updateBasicOpSummary(int val)
+    {
+        jCheckBoxInsertOp.setText("insert( " + val + " );");
+        jCheckBoxSearchOp.setText("search( " + val + " );");
+        jCheckBoxDeleteOp.setText("delete( " + val + " );");
+    }
+    
+    private void resetSummary()
+    {
+        jCheckBoxInsertOp.setText("insert();");
+        jCheckBoxSearchOp.setText("search();");
+        jCheckBoxDeleteOp.setText("delete();");
+    }
+    
+    private void jCheckBoxInsertOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxInsertOpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxInsertOpActionPerformed
+
+    private void jCheckBoxSearchOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSearchOpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxSearchOpActionPerformed
+
+    private void jCheckBoxDeleteOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDeleteOpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxDeleteOpActionPerformed
+
+    private void jRadioButtonCustomInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCustomInputActionPerformed
+        // TODO add your handling code here:
+        if (jRadioButtonCustomInput.isSelected()) {
+            jToggleTestCase.setVisible(false);
+            jTextFieldDataElement.setEnabled(true);
+            
+            // enable and check jCheckBoxInsertOp
+            jCheckBoxInsertOp.setEnabled(true);
+            jCheckBoxInsertOp.setSelected(true);
+            
+            
+            if (jTextFieldDataElement.getText().equals(""))
+                editTaskButton.setEnabled(false);
+            
+            resetSummary();            
+        }
+    }//GEN-LAST:event_jRadioButtonCustomInputActionPerformed
+
+    private void jToggleTestCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleTestCaseActionPerformed
+        // TODO add your handling code here:
+        if (jToggleTestCase.isSelected()) {
+            jToggleTestCase.setText("Positive Case");
+        }
+        else {
+            jToggleTestCase.setText("Negative Case");
+            jCheckBoxInsertOp.setSelected(false);
+            jCheckBoxInsertOp.setEnabled(false);
+        }
+        dataElement = generateDataElement(jToggleTestCase.isSelected());
+        updateBasicOpSummary(dataElement);
+    }//GEN-LAST:event_jToggleTestCaseActionPerformed
+
+    private void jComboBoxLowerLimitItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxLowerLimitItemStateChanged
+        // TODO add your handling code here:
+        validateTreeParams();      
+    }//GEN-LAST:event_jComboBoxLowerLimitItemStateChanged
+
+    private void jComboBoxUpperLimitItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxUpperLimitItemStateChanged
+        // TODO add your handling code here:
+        validateTreeParams();        
+    }//GEN-LAST:event_jComboBoxUpperLimitItemStateChanged
+
+    private void jComboBoxTreeSizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTreeSizeItemStateChanged
+        // TODO add your handling code here:
+        validateTreeParams();
+    }//GEN-LAST:event_jComboBoxTreeSizeItemStateChanged
+
+    /**
+     * Validates tree parameters (treeSize, lowerLimit, upperLimit)
+     */
+    private void validateTreeParams()
+    {
+        int lowerLimit = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+        int upperLimit = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
+        /* validate range */
+        rangeCheck(lowerLimit, upperLimit);
+        /* number of unique elements generated by given range should be greater than treeSize (N) */
+        rangeElementsCheck(lowerLimit, upperLimit);        
+    }
+    
+    /**
+     * Validate Range
+     * @param lowerLimit lower limit of given range
+     * @param upperLimit upper limit of given range
+     */
+    private void rangeCheck(int lowerLimit, int upperLimit)
+    {
+        if (lowerLimit > upperLimit) {
+            error = "<html>Error: Upper Limit should be greater than Lower Limit. </html>";
+            jLabelError.setText(error);
+            editTaskButton.setEnabled(false);
+        }
+        else {
+            jLabelError.setText("");
+            error = "";
+            editTaskButton.setEnabled(true);
+        }        
+    }
+    
+    /**
+     * Validate number of unique elements generated given the range
+     * 
+     * In order to have N unique elements, |lower - upper| >= N
+     * @param lower lower limit of given range
+     * @param upper upper limit of given range
+     */
+    private void rangeElementsCheck(int lower, int upper)
+    {
+        int treeSize = Integer.parseInt(jComboBoxTreeSize.getSelectedItem().toString());
+        if ((upper - lower) < treeSize) {
+            error += "<html>Number of unique elements generated by the above Range is lower than the specified Tree Size.<br>Please increase the"
+                  + " range or decrease the tree size</html>";
+            jLabelError.setText(error);
+            editTaskButton.setEnabled(false);
+        }
+        else {
+            jLabelError.setText("");
+            error = "";
+            editTaskButton.setEnabled(true);
+        }   
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel algorithmGroupLabel;
     private javax.swing.JLabel algorithmLabel;
+    private javax.swing.ButtonGroup buttonGroupBasicOp;
     private javax.swing.JButton cancelButton;
     private javax.swing.JPanel configurationSettingsPanel;
     private javax.swing.JButton editTaskButton;
     private javax.swing.JPanel inputSettingsPanel;
+    private javax.swing.JCheckBox jCheckBoxDeleteOp;
     private javax.swing.JCheckBox jCheckBoxDirected;
+    private javax.swing.JCheckBox jCheckBoxInsertOp;
+    private javax.swing.JCheckBox jCheckBoxSearchOp;
     private javax.swing.JCheckBox jCheckBoxSelfLoop;
     private javax.swing.JCheckBox jCheckBoxSimulateLongVisit;
     private javax.swing.JCheckBox jCheckBoxUseLowerLimit;
@@ -1405,6 +1944,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox jComboBoxHashInputSize;
     private javax.swing.JComboBox jComboBoxInitialSize;
     private javax.swing.JComboBox jComboBoxInitialSizeGraph;
+    private javax.swing.JComboBox jComboBoxLowerLimit;
     private javax.swing.JComboBox jComboBoxNumRepeats;
     private javax.swing.JComboBox<String> jComboBoxQSDistribution;
     private javax.swing.JComboBox<String> jComboBoxQSPivotPosition;
@@ -1413,6 +1953,9 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox jComboBoxSearchKey;
     private javax.swing.JComboBox<String> jComboBoxSortDistribution;
     private javax.swing.JComboBox jComboBoxStepSize;
+    private javax.swing.JComboBox jComboBoxTreeSize;
+    private javax.swing.JComboBox jComboBoxTreeType;
+    private javax.swing.JComboBox jComboBoxUpperLimit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1421,14 +1964,15 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel41;
@@ -1441,6 +1985,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelFinalSizeGraph;
     private javax.swing.JLabel jLabelFixedNumber;
     private javax.swing.JLabel jLabelGraphStructure;
@@ -1448,7 +1993,11 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabelInitialSizeGraph;
     private javax.swing.JLabel jLabelNumElements;
     private javax.swing.JLabel jLabelSearchInput;
+    private javax.swing.JLabel jLabelSearchInput1;
+    private javax.swing.JLabel jLabelSearchInput2;
+    private javax.swing.JLabel jLabelSearchInput3;
     private javax.swing.JLabel jLabelSearchKey;
+    private javax.swing.JLabel jLabelSearchKey1;
     private javax.swing.JLabel jLabelTextInfo;
     private javax.swing.JPanel jPanelEMSInputSettings;
     private javax.swing.JPanel jPanelGraph;
@@ -1460,13 +2009,19 @@ public class EditTaskDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanelQSInputSettings;
     private javax.swing.JPanel jPanelSearchInputSettings;
     private javax.swing.JPanel jPanelSortAndSearchConfigSettings;
+    private javax.swing.JPanel jPanelTreeConfigSettings;
+    private javax.swing.JPanel jPanelTreeInputSettings;
+    private javax.swing.JRadioButton jRadioButtonAlgoGen;
+    private javax.swing.JRadioButton jRadioButtonCustomInput;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTextField jTextFieldDataElement;
     private javax.swing.JTextField jTextFieldHasha;
     private javax.swing.JTextField jTextFieldHashb;
     private javax.swing.JTextField jTextFieldHashn;
     private javax.swing.JTextField jTextFieldRam;
+    private javax.swing.JToggleButton jToggleTestCase;
     private javax.swing.JTextField taskNameTextField;
     // End of variables declaration//GEN-END:variables
 }

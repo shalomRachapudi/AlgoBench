@@ -47,6 +47,7 @@ namespace inf2b
     const int SEARCH = 2;
     const int GRAPH = 3;
     const int HASH = 4;
+    const int TREE = 5;
     // algos - ALGO
     const int QUICK_SORT = 10;
     const int HEAP_SORT = 11;
@@ -58,6 +59,8 @@ namespace inf2b
     const int GRAPH_BFS = 30;
     const int GRAPH_DFS = 31;
     const int HASHING = 40;
+    const int BINARY_SEARCH_TREE = 50;
+    const int AVL_TREE = 51;
     // input distributions - INPUT_DISTRIBUTION
     const int INPUT_RANDOM = 1;
     const int INPUT_SORTED = 2;
@@ -79,6 +82,10 @@ namespace inf2b
     const int SEARCH_KEY_ALWAYS_IN_ARRAY = 1;
     const int SEARCH_KEY_NOT_IN_ARRAY = 2;
     const int SEARCH_KEY_RANDOM = 3;
+    // tree type
+    const int ROOTED_TREE = 0;
+    const int LEFT_SKEWED_TREE = 1;
+    const int RIGHT_SKEWED_TREE = 2;
     // heartbeat message char
     const char HEARTBEAT_CHAR[] = "\0\n";
 

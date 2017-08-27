@@ -16,6 +16,17 @@ void Generator::generateRandom( InputVectorType& input, const size_t& size, Inpu
     }
 }
 
+void Generator::generateUniqueRandom( InputVectorType& input, const size_t& size, InputIntType min, InputIntType max )
+{
+    srand( time( NULL ) );
+    for ( int k = 0, i = min, j = max; k < size; k++ ) {
+        int flip = (rand() % 2);
+        input.push_back( flip == 0 ? i++ : j-- );
+    }
+    
+    std::random_shuffle( input.begin(), input.end() ); // shuffle input to randomize input so that it doesn't result in a skewed tree
+}
+
 void Generator::generateRepeated( InputVectorType& input, const size_t& size, int thId )
 {
     std::cout << "Generating REPEATED input. Size: " << size << std::endl;
@@ -71,6 +82,30 @@ void Generator::generateWorst( InputVectorType& input, long low, long high, long
     }
 }
 
+void Generator::generateTreeInput( InputVectorType& input, const size_t size, const InputIntType min, const InputIntType max, const int treeType )
+{
+    /* Generate input based on tree tyoe
+     * 
+     * Rooted Tree: Random elements without duplication
+     * Left Skewed Tree: Reverse Sorted
+     * Right Skewed Tree: Sorted
+     */ 
+                        
+    input.reserve( size );
+    
+    if ( treeType == ROOTED_TREE ) {
+        std::cout << "[UPDATE]\tGenerating ROOTED_TREE input: Number of Nodes = " << size << std::endl;
+        generateUniqueRandom( input, size, min, max );
+    }
+    else if ( treeType == LEFT_SKEWED_TREE ) {
+        std::cout << "[UPDATE]\tGenerating LEFT_SKEWED_TREE input: Number of Nodes = " << size << std::endl;
+        generateRSorted( input, size, max );
+    }
+    else if ( treeType == RIGHT_SKEWED_TREE ) {
+        std::cout << "[UPDATE]\tGenerating RIGHT_SKEWED_TREE input: Number of Nodes = " << size << std::endl;
+        generateSorted( input, size, min );
+    }
+}
 void Generator::generateArray( InputVectorType& input, const size_t inputSize, const int inputDistribution, const int runNumber,
             InputIntType minValue, InputIntType maxValue )
 {

@@ -127,6 +127,10 @@ public class ResultsChartPanel extends JPanel {
         });
     }
 
+    public MyChart getChart()
+    {
+        return chart;
+    }
     public void addResultChart(MyChart chart){
         this.chart = chart;
         jPanelChartHolder.add(new XChartPanel(chart),"chart");
@@ -531,7 +535,8 @@ public class ResultsChartPanel extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonSaveChartAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveChartAsImageActionPerformed
+    public void saveChart()
+    {
         try {
             String chartID = chart.getStyleManager().getChartType().toString()+"Chart" + this.taskID + ".jpg";
             File saveFile = new File(chartID);
@@ -608,6 +613,9 @@ public class ResultsChartPanel extends JPanel {
         catch (IOException ex) {
             Logger.getLogger(ResultsChartPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    private void jButtonSaveChartAsImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveChartAsImageActionPerformed
+        saveChart();
     }//GEN-LAST:event_jButtonSaveChartAsImageActionPerformed
 
     private void jRadioShowaverageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioShowaverageActionPerformed
