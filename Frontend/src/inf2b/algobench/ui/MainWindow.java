@@ -1163,7 +1163,7 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
     }//GEN-LAST:event_jMenuItemHelpActionPerformed
 
     private void jButtonCompareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompareActionPerformed
-        this.displayMessage("Creating comparison...", false);
+        this.displayMessage("Compare Tasks", false);
         CompareDialog newCompare = new CompareDialog(new JFrame(), true, runListModel);
         newCompare.pack();
         CompareChartPanel comparePanel = newCompare.showDialog();
@@ -1209,12 +1209,65 @@ public class MainWindow extends JFrame implements ITaskCompleteListener {
         // get the selected task
         TaskMaster taskMaster = runListModel.get(rindex);
         
-        // generate
-        PDFGeneration pdf = new PDFGeneration();
-        String absolutePath = pdf.generatePDF(taskMaster);
+        try {
+            // get path and file name from JFileChooser
+            String chartID = taskMaster.getTaskID() + ".pdf";
+            File saveFile = new File(chartID);
+            
+            // create file filters
+            List<String[]> filters = new ArrayList<>();
+            filters.add(new String[]{"pdf files (.pdf)", "pdf"});
+
+            // ensure user doesn't inadvertently overwrite a file
+            JFileChooser saveChartFileChooser = new JFileChooser() {
+                @Override
+                public void approveSelection() {
+                    File saveFile = this.getSelectedFile();
+                    if (saveFile.exists()) {
+                        // confirm there's no overwrite, or it's intentional
+                        int response = JOptionPane.showConfirmDialog(this,
+                                "Overwrite existing file?", "Confirm Overwrite",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE);
+                        switch (response) {
+                            case JOptionPane.OK_OPTION:
+                                super.approveSelection();
+                                return;
+                            default: // do nothing otherwise
+                                return;
+                        }
+                    }
+                    super.approveSelection(); //To change body of generated methods, choose Tools | Templates.
+                }
+            };
+            saveChartFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+            saveChartFileChooser.setDialogTitle("Save PDF");
+            saveChartFileChooser.setCurrentDirectory(new File(AlgoBench.JarDirectory + File.separator + "saved"));
+            saveChartFileChooser.setSelectedFile(saveFile);
+
+            // filters
+            saveChartFileChooser.setAcceptAllFileFilterUsed(false);
+            for (String[] s : filters) {
+                saveChartFileChooser.addChoosableFileFilter(new FileNameExtensionFilter(s[0], s[1]));
+            }
+
+            int result = saveChartFileChooser.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                saveFile = saveChartFileChooser.getSelectedFile();
+                
+                // generate PDF
+                System.out.println("=====><><>< " + saveFile.getName() + "  " + saveFile.getCanonicalPath() + "=====><><><");
+                PDFGeneration pdf = new PDFGeneration(saveFile.getName(), saveFile.getCanonicalPath() );
+                String absolutePath = pdf.generatePDF(taskMaster);
         
-        String message = "PDF document is saved at " + absolutePath;
-        JOptionPane.showMessageDialog(this, message, "PDF Output", JOptionPane.INFORMATION_MESSAGE);
+                String message = "PDF document is saved at " + absolutePath;
+                JOptionPane.showMessageDialog(this, message, "PDF Output", JOptionPane.INFORMATION_MESSAGE);
+                
+            }
+        }
+        catch (IOException ex) {
+            System.out.println("Error generating pdf!");
+        }
     }//GEN-LAST:event_jButtonGeneratePDFActionPerformed
 
     private void loadArchive(String fileName, boolean absolutePath) {

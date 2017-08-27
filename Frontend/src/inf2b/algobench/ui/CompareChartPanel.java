@@ -79,7 +79,7 @@ public class CompareChartPanel extends JPanel {
         for(int i=0; i<model.getRowCount(); i++){
             Map<String, Series> seriesMap = new LinkedHashMap<>();
             seriesMap = chart.getSeriesMap();
-            String seriesName = model.getValueAt(i, 1)+"("+model.getValueAt(i, 2)+")";
+            String seriesName = model.getValueAt(i, 1) + "";
             Series s = seriesMap.get(seriesName);
             model.setValueAt(s.getStrokeColor(), i, 0);
         }

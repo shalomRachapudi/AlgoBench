@@ -1026,7 +1026,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
 
         jLabelSearchInput2.setText("Tree Type:");
 
-        jComboBoxTreeType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rooted Tree", "Left Skewed Tree", "Right Skewed Tree" }));
+        jComboBoxTreeType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Random Valued", "Left Skewed Tree", "Right Skewed Tree" }));
         jComboBoxTreeType.setPreferredSize(new java.awt.Dimension(120, 25));
 
         jLabelSearchInput3.setText("Upper Limit:");
@@ -1129,7 +1129,6 @@ public class EditTaskDialog extends javax.swing.JDialog {
                         .addComponent(jLabel41)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-
                 .addContainerGap(364, Short.MAX_VALUE))
             .addGroup(jPanelHashConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelHashConfigSettingsLayout.createSequentialGroup()
@@ -1247,7 +1246,6 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addGap(120, 120, 120)
                                 .addComponent(jComboBoxFixedNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jComboBoxFinalSizeGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
-
                 .addContainerGap(153, Short.MAX_VALUE))
         );
         jPanelGraphConfigSettingsLayout.setVerticalGroup(
@@ -1441,13 +1439,13 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addGap(38, 38, 38)
                                 .addComponent(jToggleTestCase))))
                     .addGroup(jPanelTreeConfigSettingsLayout.createSequentialGroup()
-                        .addGap(64, 64, 64)
+                        .addGap(66, 66, 66)
                         .addComponent(jCheckBoxInsertOp, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(44, 44, 44)
                         .addComponent(jCheckBoxSearchOp, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(66, 66, 66)
                         .addComponent(jCheckBoxDeleteOp, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
         jPanelTreeConfigSettingsLayout.setVerticalGroup(
             jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1458,18 +1456,18 @@ public class EditTaskDialog extends javax.swing.JDialog {
                     .addComponent(jToggleTestCase))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButtonCustomInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldDataElement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(17, 17, 17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldDataElement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel30, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelTreeConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBoxInsertOp)
                     .addComponent(jCheckBoxSearchOp)
                     .addComponent(jCheckBoxDeleteOp))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         configurationSettingsPanel.add(jPanelTreeConfigSettings, "treeConfigSettings");

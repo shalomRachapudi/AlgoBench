@@ -40,11 +40,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-<<<<<<< HEAD
           <Component id="jPanelMain" alignment="1" pref="620" max="32767" attributes="0"/>
-=======
-          <Component id="jPanelMain" alignment="1" pref="580" max="32767" attributes="0"/>
->>>>>>> master
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -274,11 +270,7 @@
                               <Component id="jComboBoxSearchKey" min="-2" max="-2" attributes="0"/>
                               <Component id="jComboBoxSearchInput" min="-2" max="-2" attributes="0"/>
                           </Group>
-<<<<<<< HEAD
                           <EmptySpace pref="344" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="304" max="32767" attributes="0"/>
->>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -364,11 +356,7 @@
                                   <Component id="jComboBoxGraphStructure" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-<<<<<<< HEAD
                           <EmptySpace pref="315" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="275" max="32767" attributes="0"/>
->>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -436,17 +424,10 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-<<<<<<< HEAD
                           <EmptySpace pref="78" max="32767" attributes="0"/>
                           <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jComboBoxSortDistribution" pref="129" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="58" max="32767" attributes="0"/>
-                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jComboBoxSortDistribution" pref="109" max="32767" attributes="0"/>
->>>>>>> master
                           <EmptySpace min="-2" pref="325" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -504,11 +485,7 @@
                           <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jComboBoxHashInputSize" min="-2" max="-2" attributes="0"/>
-<<<<<<< HEAD
                           <EmptySpace pref="371" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="331" max="32767" attributes="0"/>
->>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -573,11 +550,7 @@
                               <Component id="jComboBoxQSDistribution" max="32767" attributes="0"/>
                               <Component id="jComboBoxQSPivotPosition" max="32767" attributes="0"/>
                           </Group>
-<<<<<<< HEAD
                           <EmptySpace pref="374" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="334" max="32767" attributes="0"/>
->>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -674,11 +647,7 @@
                                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-<<<<<<< HEAD
                                   <EmptySpace min="0" pref="279" max="32767" attributes="0"/>
-=======
-                                  <EmptySpace min="0" pref="239" max="32767" attributes="0"/>
->>>>>>> master
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
@@ -927,7 +896,7 @@
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="3">
-                        <StringItem index="0" value="Rooted Tree"/>
+                        <StringItem index="0" value="Random Valued"/>
                         <StringItem index="1" value="Left Skewed Tree"/>
                         <StringItem index="2" value="Right Skewed Tree"/>
                       </StringArray>
@@ -1010,11 +979,7 @@
                                   <Component id="jLabel44" min="-2" pref="110" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-<<<<<<< HEAD
                           <EmptySpace pref="364" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="324" max="32767" attributes="0"/>
->>>>>>> master
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -1142,11 +1107,7 @@
                                   </Group>
                               </Group>
                           </Group>
-<<<<<<< HEAD
                           <EmptySpace pref="153" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="113" max="32767" attributes="0"/>
->>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1326,18 +1287,7 @@
                                   </Group>
                               </Group>
                           </Group>
-<<<<<<< HEAD
                           <EmptySpace pref="88" max="32767" attributes="0"/>
-=======
-                          <EmptySpace pref="48" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="268" max="-2" attributes="0"/>
-                              <Component id="jLabel38" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
->>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1510,7 +1460,7 @@
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxInsertOp" min="-2" pref="110" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
                                   <Component id="jCheckBoxSearchOp" min="-2" pref="110" max="-2" attributes="0"/>
@@ -1518,7 +1468,7 @@
                                   <Component id="jCheckBoxDeleteOp" min="-2" pref="110" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="96" max="32767" attributes="0"/>
+                          <EmptySpace pref="94" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1532,20 +1482,20 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jRadioButtonCustomInput" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel30" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                              <Component id="jTextFieldDataElement" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jTextFieldDataElement" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel30" alignment="1" min="-2" pref="20" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jCheckBoxInsertOp" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxSearchOp" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jCheckBoxDeleteOp" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="23" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
