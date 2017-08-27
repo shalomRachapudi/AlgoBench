@@ -216,6 +216,10 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
         resultChartPanel.validate();
     }
 
+    public ResultsChartPanel getResultsChartPanel()
+    {
+        return resultChartPanel;
+    }
     /**
      * Start the backend task executor process, and connect to its output stream
      *

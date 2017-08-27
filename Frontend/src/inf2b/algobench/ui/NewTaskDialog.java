@@ -73,6 +73,11 @@ public class NewTaskDialog extends JDialog {
     String[] steps;
     int current_step;
     int fileline;
+    
+    int rangeLowerLimit;
+    int rangeUpperLimit;
+    int dataElement;
+    private String error;
 
     /**
      * Creates new form NewTaskDialog
@@ -93,12 +98,17 @@ public class NewTaskDialog extends JDialog {
         this.steps = new String[]{"cardStep1", "cardStep2", "cardStep3"};
         this.current_step = 0;
         
+        // initialize range
+        this.rangeLowerLimit = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+        this.rangeUpperLimit = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
         //initial settings of step1 panel
         algoModels = new ArrayList<>();
         algoModels.add(new DefaultComboBoxModel(new String[]{"Quicksort", "Heapsort", "Insertsort","External Mergesort", "Internal Mergesort"}));
         algoModels.add(new DefaultComboBoxModel(new String[]{"Breadth-First Search", "Depth-First Search"}));
         algoModels.add(new DefaultComboBoxModel(new String[]{"Hashing"}));
         algoModels.add(new DefaultComboBoxModel(new String[]{"Linear Search", "Binary Search"}));
+        algoModels.add(new DefaultComboBoxModel(new String[]{"Binary Search Tree", "AVL Tree"}));
         
         //default select quicksort algorithm when launch
         jListAlgoType.setSelectedIndex(0);
@@ -109,6 +119,46 @@ public class NewTaskDialog extends JDialog {
         cardstep1.show(jPanelOptions1,"cardQuicksort");
         jButtonBack.setEnabled(false);
         jButtonCreateTask.setEnabled(false);
+        
+        
+        /*    public void insertUpdate(java.awt.event.ActionEvent e) {
+                
+            }*/
+        
+        // auto update tree basic operations summary when a number is given
+        jTextFieldDataElement.getDocument().addDocumentListener(new DocumentListener(){
+            void updateSummary() {
+                dataElement = 0;
+                try {
+                    dataElement = Integer.parseInt(jTextFieldDataElement.getText());
+                    jButtonCreateTask.setEnabled(true);
+                }
+                catch( java.lang.NumberFormatException ex)
+                {
+                    jButtonCreateTask.setEnabled(false);
+                }
+                int min = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+                int max = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
+                enableInsertOp( (dataElement < min || dataElement > max) ? false : true );
+                updateBasicOpSummary(dataElement);
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) {                
+                updateSummary();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateSummary();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateSummary();
+            }
+        
+        });
         
         //when set RAM, auto calculate number of elements
         jTextFieldRam.getDocument().addDocumentListener(new DocumentListener(){
@@ -334,6 +384,7 @@ public class NewTaskDialog extends JDialog {
         java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroupGraphFix = new javax.swing.ButtonGroup();
+        buttonGroupBasicOp = new javax.swing.ButtonGroup();
         jPanelLeft = new javax.swing.JPanel();
         jPanelAlgorithmGroup = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -404,6 +455,17 @@ public class NewTaskDialog extends JDialog {
         jCheckBoxSimulateLongVisit = new javax.swing.JCheckBox();
         jLabel17 = new javax.swing.JLabel();
         jButtonGraphConfigHelp2 = new javax.swing.JButton();
+        jPanelTreeInput = new javax.swing.JPanel();
+        jComboBoxTreeSize = new javax.swing.JComboBox();
+        jLabel53 = new javax.swing.JLabel();
+        jLabel57 = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
+        jComboBoxLowerLimit = new javax.swing.JComboBox();
+        jLabel55 = new javax.swing.JLabel();
+        jComboBoxUpperLimit = new javax.swing.JComboBox();
+        jLabel56 = new javax.swing.JLabel();
+        jComboBoxTreeType = new javax.swing.JComboBox();
+        jLabelError = new javax.swing.JLabel();
         jPanelHashinput = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
         jComboBoxHashInputSize = new javax.swing.JComboBox();
@@ -477,6 +539,26 @@ public class NewTaskDialog extends JDialog {
         jLabel20 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jLabel38 = new javax.swing.JLabel();
+        jPanelTreeInputFinalStep = new javax.swing.JPanel();
+        jLabel60 = new javax.swing.JLabel();
+        jSeparator10 = new javax.swing.JSeparator();
+        jLabelRange = new javax.swing.JLabel();
+        jLabel58 = new javax.swing.JLabel();
+        jLabel59 = new javax.swing.JLabel();
+        jLabelNumOfNodes = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        jRadioButtonCustomInput = new javax.swing.JRadioButton();
+        jRadioButtonAlgoGen = new javax.swing.JRadioButton();
+        jToggleTestCase = new javax.swing.JToggleButton();
+        jToggleTestCase.setVisible(true);
+        jLabel61 = new javax.swing.JLabel();
+        jTextFieldDataElement = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel62 = new javax.swing.JLabel();
+        jLabel63 = new javax.swing.JLabel();
+        jCheckBoxInsertOp = new javax.swing.JCheckBox();
+        jCheckBoxSearchOp = new javax.swing.JCheckBox();
+        jCheckBoxDeleteOp = new javax.swing.JCheckBox();
         jLabel21 = new javax.swing.JLabel();
         jPanelInfo = new javax.swing.JPanel();
         jTextAreaInfo = new javax.swing.JTextArea();
@@ -487,6 +569,9 @@ public class NewTaskDialog extends JDialog {
         jButtonNext = new javax.swing.JButton();
         jButtonCreateTask = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+
+        buttonGroupBasicOp.add(jRadioButtonAlgoGen);
+        buttonGroupBasicOp.add(jRadioButtonCustomInput);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Task...");
@@ -530,7 +615,7 @@ public class NewTaskDialog extends JDialog {
 
         jListAlgoType.setFont(jListAlgoType.getFont().deriveFont((float)13));
         jListAlgoType.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Sort", "Graph", "Hash", "Search" };
+            String[] strings = { "Sort", "Graph", "Hash", "Search", "Tree" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -704,7 +789,7 @@ public class NewTaskDialog extends JDialog {
         jLabel1.setText("Algorithm:");
 
         jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel4.setText("Click \"Next\" button below to step 2.");
+        jLabel4.setText("Click Next to Continue");
 
         jLabel44.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel44.setText("Task Name:");
@@ -747,7 +832,7 @@ public class NewTaskDialog extends JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jTextFieldTaskName, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel51))))
-                        .addGap(0, 96, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelStep1Layout.setVerticalGroup(
@@ -865,7 +950,7 @@ public class NewTaskDialog extends JDialog {
                     .addComponent(jLabelInputFilename, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonChooseInputFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelfileinfo, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(jLabelfileinfo, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelCustominputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonGraphConfigHelp1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1056,7 +1141,7 @@ public class NewTaskDialog extends JDialog {
                 .addGroup(jPanelSortinputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxMaxValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelMaxValue, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         jPanelOptions2.add(jPanelSortinput, "cardSort");
@@ -1151,14 +1236,144 @@ public class NewTaskDialog extends JDialog {
 
         jPanelOptions2.add(jPanelGraphinput, "cardGraph");
 
+        jPanelTreeInput.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
+
+        jComboBoxTreeSize.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jComboBoxTreeSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10000", "25000", "50000", "100000" }));
+        jComboBoxTreeSize.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxTreeSize.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxTreeSizeItemStateChanged(evt);
+            }
+        });
+        jComboBoxTreeSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTreeSizeActionPerformed(evt);
+            }
+        });
+
+        jLabel53.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel53.setText("Input Settings:");
+
+        jLabel57.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel57.setText("Tree Size (N):");
+
+        jLabel54.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel54.setText("Lower Limit:");
+
+        jComboBoxLowerLimit.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jComboBoxLowerLimit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "500", "1000", "10000", "25000", "50000", "75000" }));
+        jComboBoxLowerLimit.setName("STARTSIZE"); // NOI18N
+        jComboBoxLowerLimit.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxLowerLimit.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxLowerLimitItemStateChanged(evt);
+            }
+        });
+        jComboBoxLowerLimit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxLowerLimitActionPerformed(evt);
+            }
+        });
+
+        jLabel55.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel55.setText("Upper Limit:");
+
+        jComboBoxUpperLimit.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jComboBoxUpperLimit.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10000", "25000", "50000", "75000", "100000" }));
+        jComboBoxUpperLimit.setName("NUMSTEPS"); // NOI18N
+        jComboBoxUpperLimit.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxUpperLimit.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxUpperLimitItemStateChanged(evt);
+            }
+        });
+        jComboBoxUpperLimit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxUpperLimitActionPerformed(evt);
+            }
+        });
+
+        jLabel56.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel56.setText("Tree Type:");
+
+        jComboBoxTreeType.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jComboBoxTreeType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rooted Tree", "Left Skewed Tree", "Right Skewed Tree" }));
+        jComboBoxTreeType.setName("STEPSIZE"); // NOI18N
+        jComboBoxTreeType.setPreferredSize(new java.awt.Dimension(120, 25));
+        jComboBoxTreeType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTreeTypeActionPerformed(evt);
+            }
+        });
+
+        jLabelError.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+
+        javax.swing.GroupLayout jPanelTreeInputLayout = new javax.swing.GroupLayout(jPanelTreeInput);
+        jPanelTreeInput.setLayout(jPanelTreeInputLayout);
+        jPanelTreeInputLayout.setHorizontalGroup(
+            jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                .addGroup(jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel53))
+                    .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addGroup(jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel57)
+                            .addComponent(jLabel54))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBoxTreeSize, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBoxLowerLimit, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                                .addComponent(jLabel55)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBoxUpperLimit, 0, 137, Short.MAX_VALUE))
+                            .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                                .addComponent(jLabel56)
+                                .addGap(23, 23, 23)
+                                .addComponent(jComboBoxTreeType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabelError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanelTreeInputLayout.setVerticalGroup(
+            jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeInputLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel53)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxTreeSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxTreeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(jPanelTreeInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxLowerLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxUpperLimit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelError, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanelOptions2.add(jPanelTreeInput, "cardTree");
+
         jPanelHashinput.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
 
         jLabel25.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel25.setText("Input size:");
+        jLabel25.setText("Tree Size:");
 
         jComboBoxHashInputSize.setEditable(true);
         jComboBoxHashInputSize.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jComboBoxHashInputSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1000", "10000", "500000", "1000000" }));
+        jComboBoxHashInputSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1000", "10000", "50000", "100000" }));
         jComboBoxHashInputSize.setPreferredSize(new java.awt.Dimension(120, 25));
         jComboBoxHashInputSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1194,13 +1409,13 @@ public class NewTaskDialog extends JDialog {
                 .addGroup(jPanelHashinputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxHashInputSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
 
         jPanelOptions2.add(jPanelHashinput, "cardHash");
 
         jLabel10.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel10.setText("Click \"Next\" button below to step 2.");
+        jLabel10.setText("Click Next to continue");
 
         javax.swing.GroupLayout jPanelStep2Layout = new javax.swing.GroupLayout(jPanelStep2);
         jPanelStep2.setLayout(jPanelStep2Layout);
@@ -1220,18 +1435,19 @@ public class NewTaskDialog extends JDialog {
                                 .addComponent(jLabel5)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanelStep2Layout.createSequentialGroup()
-                        .addGroup(jPanelStep2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelStep2Layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addGroup(jPanelStep2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton2)
-                                    .addComponent(jCheckBoxUseCustomInput)
-                                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanelStep2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel10))
-                            .addComponent(jPanelOptions2, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 82, Short.MAX_VALUE)))
+                        .addGroup(jPanelStep2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanelStep2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanelStep2Layout.createSequentialGroup()
+                                    .addGap(21, 21, 21)
+                                    .addGroup(jPanelStep2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jRadioButton2)
+                                        .addComponent(jCheckBoxUseCustomInput)))
+                                .addGroup(jPanelStep2Layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel10))
+                                .addComponent(jPanelOptions2, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelStep2Layout.setVerticalGroup(
@@ -1770,7 +1986,7 @@ public class NewTaskDialog extends JDialog {
                 .addGroup(jPanelSearchInputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelTotalExecutionsSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanelOptions3.add(jPanelSearchInput, "cardSearch");
@@ -1925,6 +2141,181 @@ public class NewTaskDialog extends JDialog {
 
         jPanelOptions3.add(jPanelSortInput, "cardSort");
 
+        jPanelTreeInputFinalStep.setBackground(new java.awt.Color(252, 252, 255));
+        jPanelTreeInputFinalStep.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
+        jPanelTreeInputFinalStep.setOpaque(false);
+        jPanelTreeInputFinalStep.setPreferredSize(new java.awt.Dimension(530, 160));
+
+        jLabel60.setFont(new java.awt.Font("Yu Gothic", 1, 18)); // NOI18N
+        jLabel60.setText("Step 3 : Run configuration");
+
+        jSeparator10.setForeground(new java.awt.Color(0, 0, 0));
+
+        jLabelRange.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabelRange.setText("[0, 10000]");
+
+        jLabel58.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel58.setText("Range:");
+
+        jLabel59.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel59.setText("Number of Nodes:");
+
+        jLabelNumOfNodes.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+
+        jLabel52.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel52.setText("Basic Operations:");
+
+        jRadioButtonCustomInput.setText("Use custom data element");
+        jRadioButtonCustomInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonCustomInputActionPerformed(evt);
+            }
+        });
+
+        jRadioButtonAlgoGen.setText("Use Algobench-generated data element");
+        jRadioButtonAlgoGen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonAlgoGenActionPerformed(evt);
+            }
+        });
+
+        jToggleTestCase.setSelected(true);
+        jToggleTestCase.setText("Positive Case");
+        jToggleTestCase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleTestCaseActionPerformed(evt);
+            }
+        });
+
+        jLabel61.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel61.setText("Data Element:");
+
+        jLabel62.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel62.setText("Summary:");
+
+        jLabel63.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel63.setText("The following operations will be performed");
+
+        jCheckBoxInsertOp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jCheckBoxInsertOp.setSelected(true);
+        jCheckBoxInsertOp.setText("insert();");
+        jCheckBoxInsertOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxInsertOpActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxSearchOp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jCheckBoxSearchOp.setSelected(true);
+        jCheckBoxSearchOp.setText("search();");
+        jCheckBoxSearchOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxSearchOpActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxDeleteOp.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jCheckBoxDeleteOp.setSelected(true);
+        jCheckBoxDeleteOp.setText("delete();");
+        jCheckBoxDeleteOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxDeleteOpActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelTreeInputFinalStepLayout = new javax.swing.GroupLayout(jPanelTreeInputFinalStep);
+        jPanelTreeInputFinalStep.setLayout(jPanelTreeInputFinalStepLayout);
+        jPanelTreeInputFinalStepLayout.setHorizontalGroup(
+            jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel60)
+                            .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                                .addComponent(jLabel59)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelNumOfNodes, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel58)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabelRange, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(118, 118, 118))))
+                    .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                                .addComponent(jRadioButtonAlgoGen)
+                                .addGap(18, 18, 18)
+                                .addComponent(jToggleTestCase))
+                            .addComponent(jRadioButtonCustomInput)))
+                    .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel52))
+                    .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel61)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldDataElement, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel62)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel63)
+                            .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jCheckBoxInsertOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jCheckBoxSearchOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                                .addComponent(jCheckBoxDeleteOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelTreeInputFinalStepLayout.setVerticalGroup(
+            jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel60)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelRange, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelNumOfNodes, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel52)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonAlgoGen)
+                    .addComponent(jToggleTestCase))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButtonCustomInput)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDataElement, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCheckBoxInsertOp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBoxSearchOp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBoxDeleteOp)
+                .addContainerGap(11, Short.MAX_VALUE))
+        );
+
+        jPanelOptions3.add(jPanelTreeInputFinalStep, "cardTree");
+
         jLabel21.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel21.setText("Click \"Create Task\" button below to finish.");
 
@@ -1935,16 +2326,15 @@ public class NewTaskDialog extends JDialog {
             .addGroup(jPanelStep3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(310, Short.MAX_VALUE))
+                .addContainerGap(306, Short.MAX_VALUE))
             .addGroup(jPanelStep3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanelOptions3, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE))
         );
         jPanelStep3Layout.setVerticalGroup(
             jPanelStep3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelStep3Layout.createSequentialGroup()
-                .addContainerGap(332, Short.MAX_VALUE)
-                .addComponent(jLabel21)
-                .addContainerGap())
+                .addGap(0, 336, Short.MAX_VALUE)
+                .addComponent(jLabel21))
             .addGroup(jPanelStep3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelStep3Layout.createSequentialGroup()
                     .addComponent(jPanelOptions3, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2105,7 +2495,7 @@ public class NewTaskDialog extends JDialog {
         
         if(current_step == 1){ //step 2 input setting
             CardLayout cardstep2 = (CardLayout)jPanelOptions2.getLayout();
-            if(index == 1){ //Graph
+            if(index == 1 || index == 4){ //Graph or Tree? disable custom input
                jCheckBoxUseCustomInput.setEnabled(false);
                jRadioButton2.setSelected(true);
             }else{
@@ -2124,6 +2514,9 @@ public class NewTaskDialog extends JDialog {
                         break;
                     case 3: //SEARCH
                         cardstep2.show(jPanelOptions2, "cardSearch");
+                        break;
+                    case 4: //Tree
+                        cardstep2.show(jPanelOptions2, "cardTree");
                         break;
                     default:
                         break;
@@ -2151,6 +2544,11 @@ public class NewTaskDialog extends JDialog {
                 case 3:
                     cardstep3.show(jPanelOptions3, "cardSearch");
                     jButtonCreateTask.setEnabled(true);
+                    break;
+                case 4:
+                    cardstep3.show(jPanelOptions3, "cardTree");
+                    jLabelNumOfNodes.setText(jComboBoxTreeSize.getSelectedItem().toString());
+                    jButtonCreateTask.setEnabled(false);
                     break;
                 default:
                     break;
@@ -2503,6 +2901,198 @@ public class NewTaskDialog extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTaskNameActionPerformed
 
+    private void jComboBoxTreeSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTreeSizeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxTreeSizeActionPerformed
+
+    private void jComboBoxLowerLimitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLowerLimitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxLowerLimitActionPerformed
+
+    private void jComboBoxUpperLimitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxUpperLimitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxUpperLimitActionPerformed
+
+    private void jComboBoxTreeTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTreeTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxTreeTypeActionPerformed
+    
+    private void jComboBoxLowerLimitItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxLowerLimitItemStateChanged
+        // TODO add your handling code here:
+        validateTreeParams();
+    }//GEN-LAST:event_jComboBoxLowerLimitItemStateChanged
+
+    private void jComboBoxUpperLimitItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxUpperLimitItemStateChanged
+        // TODO add your handling code here:
+        validateTreeParams();
+    }//GEN-LAST:event_jComboBoxUpperLimitItemStateChanged
+
+    private void jRadioButtonCustomInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonCustomInputActionPerformed
+        // TODO add your handling code here:
+        if (jRadioButtonCustomInput.isSelected()) {
+            jToggleTestCase.setVisible(false);
+            jTextFieldDataElement.setEnabled(true);
+            
+            // enable and check jCheckBoxInsertOp
+            jCheckBoxInsertOp.setEnabled(true);
+            jCheckBoxInsertOp.setSelected(true);
+            
+            if (jTextFieldDataElement.getText().equals(""))
+                jButtonCreateTask.setEnabled(false);
+            resetSummary();            
+        }
+    }//GEN-LAST:event_jRadioButtonCustomInputActionPerformed
+
+    private void jRadioButtonAlgoGenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonAlgoGenActionPerformed
+        // TODO add your handling code here:
+         generateDataElementAndUpdateOpSummary();
+    }//GEN-LAST:event_jRadioButtonAlgoGenActionPerformed
+
+    private void generateDataElementAndUpdateOpSummary()
+    {
+        if (jRadioButtonAlgoGen.isSelected()) {
+            jToggleTestCase.setVisible(true);
+            jTextFieldDataElement.setText("");
+            jTextFieldDataElement.setEnabled(false);
+            jButtonCreateTask.setEnabled(true);
+            
+            // get a random integer 
+            dataElement = generateDataElement(jToggleTestCase.isSelected());
+            
+            // update summary and data element?
+            updateBasicOpSummary(dataElement);
+        }        
+    }
+    private void jCheckBoxInsertOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxInsertOpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxInsertOpActionPerformed
+
+    private void jCheckBoxSearchOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSearchOpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxSearchOpActionPerformed
+
+    private void jCheckBoxDeleteOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDeleteOpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBoxDeleteOpActionPerformed
+
+    private void jToggleTestCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleTestCaseActionPerformed
+        // TODO add your handling code here:
+        if (jToggleTestCase.isSelected()) {
+            jToggleTestCase.setText("Positive Case");
+        }
+        else {
+            jToggleTestCase.setText("Negative Case");
+            jCheckBoxInsertOp.setSelected(false);
+            jCheckBoxInsertOp.setEnabled(false);
+        }
+        
+        dataElement = generateDataElement(jToggleTestCase.isSelected());
+        updateBasicOpSummary(dataElement);
+    }//GEN-LAST:event_jToggleTestCaseActionPerformed
+
+    private void jComboBoxTreeSizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxTreeSizeItemStateChanged
+        // TODO add your handling code here:
+        validateTreeParams();
+    }//GEN-LAST:event_jComboBoxTreeSizeItemStateChanged
+
+    /**
+     * Validates tree parameters (treeSize, lowerLimit, upperLimit)
+     */
+    private void validateTreeParams()
+    {
+        int lowerLimit = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+        int upperLimit = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
+        /* validate range */
+        rangeCheck(lowerLimit, upperLimit);
+        /* number of unique elements generated by given range should be greater than treeSize (N) */
+        rangeElementsCheck(lowerLimit, upperLimit);        
+    }
+    
+    private int generateDataElement(boolean flag)
+    {
+        // handle insertOp case: disable it if flag == false
+        enableInsertOp(flag);
+        Random r = new Random();
+        int min = Integer.parseInt(jComboBoxLowerLimit.getSelectedItem().toString());
+        int max = Integer.parseInt(jComboBoxUpperLimit.getSelectedItem().toString());
+        
+        if (!flag) { // negative test case
+            return min - r.nextInt(100);
+        }
+        return r.nextInt((max - min) + 1) + min; // positive test case
+    }
+    
+    /**
+     * Enables jCheckBoxInsertOp based on given boolean flag
+     * 
+     * This method enables/disables insert operation based on +ve/-ve test case.
+     * insert operation is not supported for negative test case
+     *
+     * @param flag true if positive test case. False otherwise
+     */
+    private void enableInsertOp(boolean flag)
+    {
+        jCheckBoxInsertOp.setSelected(flag);
+        jCheckBoxInsertOp.setEnabled(flag);
+    }
+    private void updateBasicOpSummary(int val)
+    {
+        jCheckBoxInsertOp.setText("insert( " + val + " );");
+        jCheckBoxSearchOp.setText("search( " + val + " );");
+        jCheckBoxDeleteOp.setText("delete( " + val + " );");
+    }
+    
+    private void resetSummary()
+    {
+        jCheckBoxInsertOp.setText("insert();");
+        jCheckBoxSearchOp.setText("search();");
+        jCheckBoxDeleteOp.setText("delete();");
+    }
+    /**
+     * Validate Range
+     * @param lowerLimit lower limit of given range
+     * @param upperLimit upper limit of given range
+     */
+    private void rangeCheck(int lowerLimit, int upperLimit)
+    {
+        if (lowerLimit > upperLimit) {
+            error = "<html>Error: Upper Limit should be greater than Lower Limit. </html>";
+            jLabelError.setText(error);
+            jButtonNext.setEnabled(false);
+        }
+        else {
+            jLabelError.setText("");
+            error = "";
+            jButtonNext.setEnabled(true);
+            String range = "[" + lowerLimit + ", " + upperLimit + "]";
+            jLabelRange.setText(range);
+        }        
+    }
+    
+    /**
+     * Validate number of unique elements generated given the range
+     * 
+     * In order to have N unique elements, |lower - upper| >= N
+     * @param lower lower limit of given range
+     * @param upper upper limit of given range
+     */
+    private void rangeElementsCheck(int lower, int upper)
+    {
+        int treeSize = Integer.parseInt(jComboBoxTreeSize.getSelectedItem().toString());
+        if ((upper - lower) < treeSize) {
+            error += "<html>Number of unique elements generated by the above Range is lower than the specified Tree Size. Please increase the"
+                  + " range or decrease the tree size</html>";
+            jLabelError.setText(error);
+            jButtonNext.setEnabled(false);
+        }
+        else {
+            jLabelError.setText("");
+            error = "";
+            jButtonNext.setEnabled(true);
+        }   
+    }
+    
     private static boolean isCoprime(int u, int v) {
     // If both numbers are even, then they are not coprime.
     if (((u | v) & 1) == 0) return false;
@@ -2975,7 +3565,7 @@ public class NewTaskDialog extends JDialog {
         }
         
         TaskMaster tm = new TaskMaster(task);
-        System.out.println(task.getCommand());
+        System.out.println(tm.getTask().getCommand());
         this.dispose();
         return tm;
     }
@@ -2983,18 +3573,6 @@ public class NewTaskDialog extends JDialog {
     private boolean prepareTask() {
         String algoGroup = jListAlgoType.getSelectedValue().toString().toUpperCase().trim();
                
-        // task ID or task name
-        long tmp = System.currentTimeMillis() % 1000;
-        String id = jTextFieldTaskName.getText().trim();
-        if (id.equals("")) {
-            if(tmp < 100)
-                id = "0" + tmp;
-            else 
-                id = "" + tmp;
-            id = "Task_" + id;
-        }
-        
-        this.task.setTaskID(id);
         this.task.setAlgorithm(this.jComboBoxAlgo.getSelectedItem().toString());
         this.task.setRunTitle(task.getTaskID() + " (" + task.getAlgorithm() + ")");
         this.task.setAlgorithmGroup(algoGroup);
@@ -3068,10 +3646,35 @@ public class NewTaskDialog extends JDialog {
                     this.task.setNumRuns();
                     this.task.setNumRepeats(Integer.parseInt(this.jComboBoxNumRepeatsSearch.getSelectedItem().toString()));
                     break;
+                case "TREE":
+                    this.task.setTreeSize(this.jComboBoxTreeSize.getSelectedItem().toString());
+                    this.task.setTreeRangeLowerLimit(this.jComboBoxLowerLimit.getSelectedItem().toString());
+                    this.task.setTreeRangeUpperLimit(this.jComboBoxUpperLimit.getSelectedItem().toString());
+                    this.task.setTreeType(this.jComboBoxTreeType.getSelectedItem().toString());
+                    
+                    // basic operations
+                    this.task.setDataElement(Integer.toString(dataElement));
+                    this.task.setInsertOp(jCheckBoxInsertOp.isSelected());
+                    this.task.setSearchOp(jCheckBoxSearchOp.isSelected());
+                    this.task.setDeleteOp(jCheckBoxDeleteOp.isSelected());
+                    break;
                 default:
                     break;
             }
         }
+        
+        // task ID or task name
+        long tmp = System.currentTimeMillis() % 1000;
+        String id = jTextFieldTaskName.getText().trim();
+        if (id.equals("")) {
+            if(tmp < 100)
+                id = "0" + tmp;
+            else 
+                id = "" + tmp;
+            id = task.getAlgorithm().toLowerCase() + "_" + id;
+        }
+        
+        this.task.setTaskID(id);
         if (this.task.getError().length() > 0) {
             System.out.println("Waiting for option pane");
             JOptionPane.showMessageDialog(this, "Please fix the following errors:\n" + this.task.getError(),
@@ -3127,6 +3730,7 @@ public class NewTaskDialog extends JDialog {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupBasicOp;
     private javax.swing.ButtonGroup buttonGroupGraphFix;
     private javax.swing.JButton jButtonBack;
     private javax.swing.JButton jButtonCancel;
@@ -3137,7 +3741,10 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JButton jButtonGraphConfigHelp2;
     private javax.swing.JButton jButtonHelp;
     private javax.swing.JButton jButtonNext;
+    private javax.swing.JCheckBox jCheckBoxDeleteOp;
     private javax.swing.JCheckBox jCheckBoxDirected;
+    private javax.swing.JCheckBox jCheckBoxInsertOp;
+    private javax.swing.JCheckBox jCheckBoxSearchOp;
     private javax.swing.JCheckBox jCheckBoxSelfLoop;
     private javax.swing.JCheckBox jCheckBoxSimulateLongVisit;
     private javax.swing.JRadioButton jCheckBoxUseCustomInput;
@@ -3154,6 +3761,7 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JComboBox jComboBoxInitialSizeGraph;
     private javax.swing.JComboBox jComboBoxInitialSizeSearch;
     private javax.swing.JComboBox jComboBoxInputDistribution;
+    private javax.swing.JComboBox jComboBoxLowerLimit;
     private javax.swing.JComboBox jComboBoxMaxValue;
     private javax.swing.JComboBox jComboBoxMaxValue1;
     private javax.swing.JComboBox jComboBoxMinValue;
@@ -3166,6 +3774,9 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JComboBox jComboBoxSearchKey;
     private javax.swing.JComboBox jComboBoxStepSize;
     private javax.swing.JComboBox jComboBoxStepSizeSearch;
+    private javax.swing.JComboBox jComboBoxTreeSize;
+    private javax.swing.JComboBox jComboBoxTreeType;
+    private javax.swing.JComboBox jComboBoxUpperLimit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3213,10 +3824,23 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelError;
     private javax.swing.JLabel jLabelFinalSizeGraph;
     private javax.swing.JLabel jLabelFixedNumber;
     private javax.swing.JLabel jLabelGraphStructure;
@@ -3229,6 +3853,8 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JLabel jLabelMinValue;
     private javax.swing.JLabel jLabelMinValue1;
     private javax.swing.JLabel jLabelNumEle;
+    private javax.swing.JLabel jLabelNumOfNodes;
+    private javax.swing.JLabel jLabelRange;
     private javax.swing.JLabel jLabelSearchInput;
     private javax.swing.JLabel jLabelSearchKey;
     private javax.swing.JLabel jLabelStartSizeGraph2;
@@ -3263,10 +3889,16 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JPanel jPanelStep1;
     private javax.swing.JPanel jPanelStep2;
     private javax.swing.JPanel jPanelStep3;
+    private javax.swing.JPanel jPanelTreeInput;
+    private javax.swing.JPanel jPanelTreeInputFinalStep;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButtonAlgoGen;
+    private javax.swing.JRadioButton jRadioButtonCustomInput;
     private javax.swing.JRadioButton jRadioButtonEdge;
     private javax.swing.JRadioButton jRadioButtonVertex;
     private javax.swing.JScrollPane jScrollPaneAlgoTypeList;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -3276,11 +3908,13 @@ public class NewTaskDialog extends JDialog {
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTextArea jTextAreaInfo;
+    private javax.swing.JTextField jTextFieldDataElement;
     private javax.swing.JTextField jTextFieldHasha;
     private javax.swing.JTextField jTextFieldHashb;
     private javax.swing.JTextField jTextFieldHashn;
     private javax.swing.JTextField jTextFieldRam;
     private javax.swing.JTextField jTextFieldTaskName;
+    private javax.swing.JToggleButton jToggleTestCase;
     // End of variables declaration//GEN-END:variables
 
 }
