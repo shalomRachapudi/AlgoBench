@@ -12,6 +12,7 @@
 
 namespace inf2b
 {
+
     class ExternalMergeSort 
     {
     private:

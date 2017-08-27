@@ -30,7 +30,8 @@
 #include <sstream>
 #include <functional>
 #include <condition_variable>
-#include <cstring>   
+#include <cstring>  
+#include <set>
 #include <cerrno>
 #include <limits.h>     // since MS VC++ has issues with max() in <limits>
 

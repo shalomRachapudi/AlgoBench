@@ -41,6 +41,7 @@ namespace inf2b
         bool m_insertOp;
         bool m_searchOp;
         bool m_deleteOp;
+        std::string m_output;
         InputIntType m_dataElement;
         InputVectorType& m_input;
         
@@ -128,7 +129,10 @@ namespace inf2b
                           m_input ( input )
                         {}
                         
-        void operator()();
+        /**
+         * Returns m_output : m_output is sent to front-end to create runtime chart / table
+         */
+        std::string operator()();
         
         /**
          * Returns minimum element of the BST
@@ -205,6 +209,11 @@ namespace inf2b
          * Returns level of node
          */
         int getNodeLevel( const InputIntType& key );
+        
+        /**
+         * Returns progress
+         */
+        std::string progress();
         
         
     };

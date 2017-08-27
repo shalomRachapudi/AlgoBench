@@ -79,6 +79,7 @@ namespace inf2b
                 int status;
             };
             std::vector<Args> customStack; // what changes if you use pointer to struct std::vector<Args*>?
+            
             long pivotIndex = partition(low, high);
             long stackDepth;
             Args args = {low, high, pivotIndex, 0};
@@ -128,6 +129,7 @@ namespace inf2b
         const long partition(long low, long high) {
             assert((long) input.size() > high && low >= 0);
             // use middle(-left) element as pivot
+               
             long pivotIndex;
             if (pivotPosition == QUICKSORT_PIVOT_CENTRE) {
                 pivotIndex = static_cast<InputIntType> ((low + high) / 2);

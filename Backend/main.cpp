@@ -23,7 +23,7 @@
  *
  * The entry point for the application.
  * 
- * Modified by Yufen Wang, 2016
+ * Modified by Yufen Wang (2016), Shalom (2017)
  */
 
 #ifndef MAIN_H
@@ -46,6 +46,7 @@
 #include "InternalMergeSort.h"
 #include "LinearSearch.h"
 #include "BinarySearch.h"
+#include "BinarySearchTree.h"
 
 namespace inf2b
 {
@@ -77,7 +78,7 @@ namespace inf2b
         // inform the communicator that there's something to send
         inf2b::progressSemaphore.notify();
     }
-
+    
     // execute by Command[]
     void execute()
     {
@@ -98,6 +99,44 @@ namespace inf2b
             std::cout << "[STATUS]\tTransferring results to SERVER..." << std::endl;
             
             reportProgress( output );
+            return;
+        }
+        
+        // for Tree DS and Algo
+        if ( Command[ "ALGORITHM-GROUP" ] == TREE ) {
+            
+            InputVectorType input;
+            std::cout << "[STATUS]\tGenerating input" << std::endl;
+            currentInputSize = Command[ "TREE-SIZE" ];
+            
+            Generator::generateTreeInput( input, currentInputSize, Command[ "TREE-RANGE-LOWER-LIMIT" ], Command[ "TREE-RANGE-UPPER-LIMIT" ], Command[ "TREE-TYPE" ] );
+            //std::cout << "[CURRENTINPUTSIZE]\t" << currentInputSize << std::endl;
+            
+            // get memory usage
+            size_t memPerNode = inf2b::nodeSizeWithRef();
+            MemoryUsage = currentInputSize * memPerNode;
+            std::cout << "[CURRENTMEMUSAGE]\t" << MemoryUsage << std::endl;
+            std::cout << "[MEMPERNODE]\t" << memPerNode << " KB" << std::endl;
+            
+            if ( Command[ "ALGORITHM" ] == BINARY_SEARCH_TREE ) {
+                BinarySearchTree bst( input,
+                                      currentInputSize,
+                                      Command[ "TREE-RANGE-LOWER-LIMIT" ],
+                                      Command[ "TREE-RANGE-UPPER-LIMIT" ],
+                                      Command[ "DATA-ELEMENT" ],
+                                      Command[ "INSERT-OP" ],
+                                      Command[ "SEARCH-OP" ],
+                                      Command[ "DELETE-OP" ]
+                                    );
+                output = bst();
+                
+                // send progress to front-end
+                reportProgress( output + "\n" );
+            }
+            else {
+                // TODO: Implement AVL TREES
+            }
+            
             return;
         }
         // the other "timing" algos
@@ -180,7 +219,9 @@ namespace inf2b
 
         // executing algorithms
         for ( int i = 0; i < Command[ "NUMRUNS" ]; ++i ) {
+            
             currentInputSize = Command[ "INPUT-STARTSIZE" ] + ( i * Command[ "INPUT-STEPSIZE" ] );
+            
             long elapsedTime = 0L;
             output = std::to_string( currentInputSize );
 

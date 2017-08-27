@@ -222,20 +222,48 @@ size_t inf2b::nodeSizeWithRef()
     return sizeWithRef;
 }
 
-void BinarySearchTree::operator()()
+std::string BinarySearchTree::operator()()
 {
     std::cout << "Inserting keys into BST" << std::endl;
-
+            
+    /* timing insertion and basic operations */
+    std::chrono::time_point< std::chrono::high_resolution_clock > start_time, end_time;
+    
+    
    	/* report progress */
    	int tenPercentLimit = m_treeSize / 100;
    	int totalProgress = 0;
    	int nodesSoFar = 0;
+    int nodesInsertedSoFar = 0;
+
+
+    // report progress -- first line of table and chart
+    m_output = "BEGIN\nNumber of Elements \tRun 1\n";
+    
+    /* insertion (or) constructing BST */
+    start_time = std::chrono::high_resolution_clock::now();
     for (InputIntType element : m_input) {
         insert( element );
 
         nodesSoFar++;
         if (nodesSoFar == tenPercentLimit) {
-        	totalProgress += 1;
+            
+            totalProgress += 1;
+            nodesInsertedSoFar += nodesSoFar;
+            
+            // get end_time
+            end_time = std::chrono::high_resolution_clock::now();
+
+            // append time taken to ouput
+            m_output.append( std::to_string( nodesInsertedSoFar ) + "\t" 
+                                + std::to_string( std::chrono::duration_cast< std::chrono::microseconds >
+                                ( end_time - start_time ).count() ) + "\n"
+                        );
+
+            std::cout << "[UPDATE]\tSummary: Size = " << nodesInsertedSoFar << "  Time = " << std::chrono::duration_cast< std::chrono::microseconds >
+                                ( end_time - start_time ).count() << "  micro seconds" << std::endl;
+            
+            // reset nodes so far
         	nodesSoFar = 0;
 
         	std::cout << "[TOTALPROGRESS]\t" << totalProgress << std::endl;
@@ -249,11 +277,7 @@ void BinarySearchTree::operator()()
     
     // update height of the tree
     std::cout << "[TREEHEIGHT]\t" << height() << std::endl;
-    
-    
-    // Start basic operations
-    std::chrono::time_point< std::chrono::high_resolution_clock > start_time, end_time;
-    
+        
     // insertion
     if ( m_insertOp ) {
         start_time = std::chrono::high_resolution_clock::now();
@@ -291,6 +315,9 @@ void BinarySearchTree::operator()()
                             << std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count() << std::endl;
     
     }
+    
+    // return m_output
+    return m_output;
 }
 
 /*********************** Utility methods **********************/
@@ -321,4 +348,3 @@ int inf2b::BinarySearchTree::size( Node* t )
         return 0;
     return ( size( t->m_left ) + 1 + size( t->m_right ) );
 }
-
