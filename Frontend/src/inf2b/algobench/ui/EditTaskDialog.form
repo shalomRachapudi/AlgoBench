@@ -40,7 +40,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
+<<<<<<< HEAD
           <Component id="jPanelMain" alignment="1" pref="620" max="32767" attributes="0"/>
+=======
+          <Component id="jPanelMain" alignment="1" pref="580" max="32767" attributes="0"/>
+>>>>>>> master
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -270,7 +274,11 @@
                               <Component id="jComboBoxSearchKey" min="-2" max="-2" attributes="0"/>
                               <Component id="jComboBoxSearchInput" min="-2" max="-2" attributes="0"/>
                           </Group>
+<<<<<<< HEAD
                           <EmptySpace pref="344" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="304" max="32767" attributes="0"/>
+>>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -356,7 +364,11 @@
                                   <Component id="jComboBoxGraphStructure" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+<<<<<<< HEAD
                           <EmptySpace pref="315" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="275" max="32767" attributes="0"/>
+>>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -424,10 +436,17 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
+<<<<<<< HEAD
                           <EmptySpace pref="78" max="32767" attributes="0"/>
                           <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jComboBoxSortDistribution" pref="129" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="58" max="32767" attributes="0"/>
+                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="jComboBoxSortDistribution" pref="109" max="32767" attributes="0"/>
+>>>>>>> master
                           <EmptySpace min="-2" pref="325" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -485,7 +504,11 @@
                           <Component id="jLabel25" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jComboBoxHashInputSize" min="-2" max="-2" attributes="0"/>
+<<<<<<< HEAD
                           <EmptySpace pref="371" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="331" max="32767" attributes="0"/>
+>>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -550,7 +573,11 @@
                               <Component id="jComboBoxQSDistribution" max="32767" attributes="0"/>
                               <Component id="jComboBoxQSPivotPosition" max="32767" attributes="0"/>
                           </Group>
+<<<<<<< HEAD
                           <EmptySpace pref="374" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="334" max="32767" attributes="0"/>
+>>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -647,7 +674,11 @@
                                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
+<<<<<<< HEAD
                                   <EmptySpace min="0" pref="279" max="32767" attributes="0"/>
+=======
+                                  <EmptySpace min="0" pref="239" max="32767" attributes="0"/>
+>>>>>>> master
                               </Group>
                               <Group type="102" attributes="0">
                                   <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
@@ -979,7 +1010,11 @@
                                   <Component id="jLabel44" min="-2" pref="110" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+<<<<<<< HEAD
                           <EmptySpace pref="364" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="324" max="32767" attributes="0"/>
+>>>>>>> master
                       </Group>
                       <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -1107,7 +1142,11 @@
                                   </Group>
                               </Group>
                           </Group>
+<<<<<<< HEAD
                           <EmptySpace pref="153" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="113" max="32767" attributes="0"/>
+>>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1287,7 +1326,18 @@
                                   </Group>
                               </Group>
                           </Group>
+<<<<<<< HEAD
                           <EmptySpace pref="88" max="32767" attributes="0"/>
+=======
+                          <EmptySpace pref="48" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="268" max="-2" attributes="0"/>
+                              <Component id="jLabel38" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                          </Group>
+>>>>>>> master
                       </Group>
                   </Group>
                 </DimensionLayout>
