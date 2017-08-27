@@ -54,6 +54,15 @@ import org.apache.fop.apps.MimeConstants;
 
 public class PDFGeneration {
     
+    private String pdfName;
+    private String pdfCanonicalPath; // absolute path with file name
+    
+    public PDFGeneration(String pdfName, String pdfCanonicalPath)
+    {
+        this.pdfName = pdfName;
+        this.pdfCanonicalPath = pdfCanonicalPath;
+    }
+    
     /**
      * Generates PDF for selected task
      * @param t : Task t
@@ -71,21 +80,15 @@ public class PDFGeneration {
             System.out.println("Generating PDF for " + task.getAlgorithm());
             
             File baseDir = new File(".");
-            File outDir = new File(baseDir, "out");
-            outDir.mkdirs();
             System.out.println("Base directory: " + baseDir);
             // setup input & output files
-            String pdfFileName = task.getTaskID() + ".pdf";
-            System.out.println(pdfFileName);
             File xsltFile = new File(baseDir, "xml/xslt/task.xsl");
-            File pdfFile = new File(outDir, pdfFileName);
+            File pdfFile = new File(pdfCanonicalPath);
             
             // generate runtime chart
             String chartID = "image.jpg";
             File saveFile = new File(baseDir, "images/" + chartID);
-            System.out.println(saveFile.getCanonicalPath());
             BitmapEncoder.saveBitmap(chart, saveFile.getCanonicalPath(), BitmapEncoder.BitmapFormat.JPG);
-            
             
             //get xml source code
             String xmlSrc = getXMLSourceCode(task);
@@ -127,7 +130,7 @@ public class PDFGeneration {
         }
         catch(Exception ex)
         {
-            System.out.print("Error");
+            System.out.print("Error: ");
             ex.printStackTrace(System.err);
             return null;
         }
@@ -200,7 +203,7 @@ public class PDFGeneration {
         
         sb.append("\n</data>");
         
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
         return sb.toString();
     }
 }

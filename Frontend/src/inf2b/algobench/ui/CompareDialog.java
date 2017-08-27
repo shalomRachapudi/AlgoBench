@@ -108,7 +108,7 @@ public class CompareDialog extends JDialog {
                     jTableDetails.setModel(algoModel);
                     algoModel.addColumn("Color");
                     algoModel.addColumn("TaskID");
-                    algoModel.addColumn("Algotithm");
+                    algoModel.addColumn("Algorithm");
                     switch(algoType){
                         case "SORT":
                             algoModel.addColumn("Distribution");
@@ -127,6 +127,10 @@ public class CompareDialog extends JDialog {
                             algoModel.addColumn("Search key");
                             algoModel.addColumn("InputFile");
                             break;
+                        case "TREE":
+                            algoModel.addColumn("Tree Type");
+                            algoModel.addColumn("Size");
+                            algoModel.addColumn("Input Range");
                     }
                     addDetailTableRow(ta);
                     jTableDetails.getColumnModel().getColumn(0).setMinWidth(0);
@@ -206,6 +210,19 @@ public class CompareDialog extends JDialog {
                     onerow.add(ta.getInputFileName());
                 }
                 break;
+            case "TREE":
+                String tree = null;
+                String treeType = ta.getTreeType();
+                if (treeType.equals("0"))
+                    tree = "Random Valued";
+                else if (treeType.equals("1"))
+                    tree = "Left Skewed Tree";
+                else if (treeType.equals("2"))
+                    tree = "Right Skewed Tree";
+                
+                onerow.add(tree);
+                onerow.add(ta.getTreeSize());
+                onerow.add(ta.getTreeRange());
         }
         algoModel.addRow(onerow);
     }
@@ -281,7 +298,7 @@ public class CompareDialog extends JDialog {
         jButtonCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("New Comparing");
+        setTitle("Compare Tasks");
         setIconImages(AlgoBench.iconImagesList);
         setMinimumSize(new java.awt.Dimension(800, 500));
         setModal(true);
@@ -398,7 +415,6 @@ public class CompareDialog extends JDialog {
         jTableDetails.setEnabled(false);
         jTableDetails.setRowHeight(20);
         jTableDetails.setSelectionBackground(new java.awt.Color(102, 153, 204));
-        jTableDetails.setShowGrid(true);
         jScrollPane1.setViewportView(jTableDetails);
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
@@ -406,20 +422,17 @@ public class CompareDialog extends JDialog {
         jPanelMainLayout.setHorizontalGroup(
             jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelMainLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelMainLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jTextAreaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelMainLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanelMainLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabelAlgogroup))
-                            .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1))))
+                    .addComponent(jTextAreaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 519, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanelMainLayout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabelAlgogroup))
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addComponent(jScrollPane1)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanelMainLayout.setVerticalGroup(
@@ -434,10 +447,10 @@ public class CompareDialog extends JDialog {
                     .addComponent(jLabel4)
                     .addComponent(jLabelAlgogroup))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(jTextAreaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextAreaInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                .addGap(23, 23, 23))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -475,7 +488,7 @@ public class CompareDialog extends JDialog {
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 10, 10));
 
         jButtonComfirm.setFont(jButtonComfirm.getFont().deriveFont((float)12));
-        jButtonComfirm.setText("Comfirm");
+        jButtonComfirm.setText("Confirm");
         jButtonComfirm.setPreferredSize(new java.awt.Dimension(105, 25));
         jButtonComfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -532,19 +545,24 @@ public class CompareDialog extends JDialog {
         String XAxisTitle, YAxisTitle;
         switch(jLabelAlgogroup.getText()){
             case "SORT":
-                title = "SORT algorithm cmpare chart";
+                title = "SORT algorithm compare chart";
                 XAxisTitle = "Input Size";
                 YAxisTitle = "Run Time(ms)";
                 break;
             case "GRAPH":
-                title = "GRAPH algorithm cmpare chart";
+                title = "GRAPH algorithm compare chart";
                 XAxisTitle = "Input Size";
                 YAxisTitle = "Time (ms)";
                 break;
             case "SEARCH":
-                title = "SEARCH algorithm cmpare chart";
+                title = "SEARCH algorithm compare chart";
                 XAxisTitle = "Input Size";
                 YAxisTitle = "Time (μs)";
+                break;
+            case "TREE":
+                title = "TREE algorithm compare chart";
+                XAxisTitle = "Input Size";
+                YAxisTitle = "Time (μs)"; 
                 break;
             default:
                 displayError("Can not find algo group");
@@ -561,7 +579,7 @@ public class CompareDialog extends JDialog {
             ResultsChartPanel rcpanel = (ResultsChartPanel)tma.getResultChartPanel();
             Series tmps = rcpanel.getAverageSeries();
             Task t = tma.getTask();
-            String seriesName = tma.getTaskID()+"("+t.getAlgorithm()+")";
+            String seriesName = tma.getTaskID();
             
             serieses.put(seriesName, tmps);
         }

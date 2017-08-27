@@ -44,7 +44,7 @@ public class TreeTaskSubPanel extends javax.swing.JPanel implements ITreeSubPane
     {
         String tree = null;
         if (treeType.equals("0"))
-            tree = "Rooted Tree";
+            tree = "Random Valued Tree";
         else if (treeType.equals("1"))
             tree = "Left Skewed Tree";
         else if (treeType.equals("2"))

@@ -108,7 +108,7 @@ public class NewTaskDialog extends JDialog {
         algoModels.add(new DefaultComboBoxModel(new String[]{"Breadth-First Search", "Depth-First Search"}));
         algoModels.add(new DefaultComboBoxModel(new String[]{"Hashing"}));
         algoModels.add(new DefaultComboBoxModel(new String[]{"Linear Search", "Binary Search"}));
-        algoModels.add(new DefaultComboBoxModel(new String[]{"Binary Search Tree", "AVL Tree"}));
+        algoModels.add(new DefaultComboBoxModel(new String[]{"Binary Search Tree"}));
         
         //default select quicksort algorithm when launch
         jListAlgoType.setSelectedIndex(0);
@@ -1298,7 +1298,7 @@ public class NewTaskDialog extends JDialog {
         jLabel56.setText("Tree Type:");
 
         jComboBoxTreeType.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jComboBoxTreeType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Rooted Tree", "Left Skewed Tree", "Right Skewed Tree" }));
+        jComboBoxTreeType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Random Valued", "Left Skewed Tree", "Right Skewed Tree" }));
         jComboBoxTreeType.setName("STEPSIZE"); // NOI18N
         jComboBoxTreeType.setPreferredSize(new java.awt.Dimension(120, 25));
         jComboBoxTreeType.addActionListener(new java.awt.event.ActionListener() {
@@ -2268,11 +2268,13 @@ public class NewTaskDialog extends JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel63)
-                            .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jCheckBoxInsertOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jCheckBoxSearchOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-                                .addComponent(jCheckBoxDeleteOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanelTreeInputFinalStepLayout.createSequentialGroup()
+                                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jCheckBoxInsertOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jCheckBoxDeleteOp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jCheckBoxSearchOp, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanelTreeInputFinalStepLayout.setVerticalGroup(
             jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2306,12 +2308,12 @@ public class NewTaskDialog extends JDialog {
                     .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBoxInsertOp)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxSearchOp)
+                .addGroup(jPanelTreeInputFinalStepLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBoxInsertOp)
+                    .addComponent(jCheckBoxSearchOp))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxDeleteOp)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         jPanelOptions3.add(jPanelTreeInputFinalStep, "cardTree");
