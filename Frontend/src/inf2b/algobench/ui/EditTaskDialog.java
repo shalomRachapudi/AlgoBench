@@ -741,11 +741,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelSearchInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jComboBoxSearchKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxSearchInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-<<<<<<< HEAD
                 .addContainerGap(344, Short.MAX_VALUE))
-=======
-                .addContainerGap(304, Short.MAX_VALUE))
->>>>>>> master
         );
         jPanelSearchInputSettingsLayout.setVerticalGroup(
             jPanelSearchInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -789,11 +785,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                             .addComponent(jCheckBoxSelfLoop))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jComboBoxGraphStructure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-<<<<<<< HEAD
                 .addContainerGap(315, Short.MAX_VALUE))
-=======
-                .addContainerGap(275, Short.MAX_VALUE))
->>>>>>> master
         );
         jPanelGraphLayout.setVerticalGroup(
             jPanelGraphLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -826,17 +818,10 @@ public class EditTaskDialog extends javax.swing.JDialog {
         jPanelOtherSortsLayout.setHorizontalGroup(
             jPanelOtherSortsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelOtherSortsLayout.createSequentialGroup()
-<<<<<<< HEAD
                 .addContainerGap(78, Short.MAX_VALUE)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBoxSortDistribution, 0, 129, Short.MAX_VALUE)
-=======
-                .addContainerGap(58, Short.MAX_VALUE)
-                .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBoxSortDistribution, 0, 109, Short.MAX_VALUE)
->>>>>>> master
                 .addGap(325, 325, 325))
         );
         jPanelOtherSortsLayout.setVerticalGroup(
@@ -871,11 +856,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addComponent(jLabel25)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBoxHashInputSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-<<<<<<< HEAD
                 .addContainerGap(371, Short.MAX_VALUE))
-=======
-                .addContainerGap(331, Short.MAX_VALUE))
->>>>>>> master
         );
         jPanelHashInputSettingsLayout.setVerticalGroup(
             jPanelHashInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -915,11 +896,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                 .addGroup(jPanelQSInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBoxQSDistribution, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboBoxQSPivotPosition, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-<<<<<<< HEAD
                 .addContainerGap(374, Short.MAX_VALUE))
-=======
-                .addContainerGap(334, Short.MAX_VALUE))
->>>>>>> master
         );
         jPanelQSInputSettingsLayout.setVerticalGroup(
             jPanelQSInputSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -987,11 +964,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addComponent(jLabelNumElements)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel11)))
-<<<<<<< HEAD
                         .addGap(0, 279, Short.MAX_VALUE))
-=======
-                        .addGap(0, 239, Short.MAX_VALUE))
->>>>>>> master
                     .addGroup(jPanelEMSInputSettingsLayout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addGap(41, 41, 41)
@@ -1156,11 +1129,8 @@ public class EditTaskDialog extends javax.swing.JDialog {
                         .addComponent(jLabel41)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-<<<<<<< HEAD
+
                 .addContainerGap(364, Short.MAX_VALUE))
-=======
-                .addContainerGap(324, Short.MAX_VALUE))
->>>>>>> master
             .addGroup(jPanelHashConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelHashConfigSettingsLayout.createSequentialGroup()
                     .addGap(178, 178, 178)
@@ -1277,11 +1247,8 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addGap(120, 120, 120)
                                 .addComponent(jComboBoxFixedNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jComboBoxFinalSizeGraph, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))))
-<<<<<<< HEAD
+
                 .addContainerGap(153, Short.MAX_VALUE))
-=======
-                .addContainerGap(113, Short.MAX_VALUE))
->>>>>>> master
         );
         jPanelGraphConfigSettingsLayout.setVerticalGroup(
             jPanelGraphConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1378,16 +1345,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jComboBoxNumRepeats, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel39))))
-<<<<<<< HEAD
                 .addContainerGap(88, Short.MAX_VALUE))
-=======
-                .addContainerGap(48, Short.MAX_VALUE))
-            .addGroup(jPanelSortAndSearchConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanelSortAndSearchConfigSettingsLayout.createSequentialGroup()
-                    .addGap(268, 268, 268)
-                    .addComponent(jLabel38)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
->>>>>>> master
         );
         jPanelSortAndSearchConfigSettingsLayout.setVerticalGroup(
             jPanelSortAndSearchConfigSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1599,11 +1557,7 @@ public class EditTaskDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-<<<<<<< HEAD
             .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
-=======
-            .addComponent(jPanelMain, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
->>>>>>> master
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
