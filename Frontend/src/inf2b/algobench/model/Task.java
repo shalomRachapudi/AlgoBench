@@ -513,7 +513,6 @@ public class Task implements Serializable {
     
     public void setTotalProgress(String progress)
     {
-        System.out.println("Progress ===== " + progress);
         totalProgress = progress;
     }
     public String getTotalProgress()

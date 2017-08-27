@@ -180,11 +180,11 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
         Plotter p;
         
         if ("HASH".equals(task.getAlgorithmGroup(true))) {
-            p = new Plotter(this.task.getRunTitle(), response.toString(), 2);
+            p = new Plotter(this.task.getTaskID(), response.toString(), 2);
             p.setYAxisLabel("Bucket");
             p.setXAxisLabel("Bucket Size");
             // additional bar chart for Hash results
-            resultChartPanel = new ResultsChartPanel(this.getTaskID());
+            resultChartPanel = new ResultsChartPanel(task.getTaskID());
             resultChartPanel.addResultChart(p.getBarChart());
             resultTablePanel = new ResultsTablePanel(response.toString(), this.getTaskID(), true, "");
             // show averages (for Hashing)
@@ -195,21 +195,21 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
             this.taskPanel.updateComponents("[STDDEVIATION]\t" + df.format(p.getStandardDeviation()));
         }
         else {
-            p = new Plotter(this.task.getRunTitle(), response.toString(), 0);
-            if(task.getAlgorithmGroup(true).equals("SEARCH")){
+            p = new Plotter(this.task.getTaskID(), response.toString(), 0);
+            if(task.getAlgorithmGroup(true).equals("SEARCH") || task.getAlgorithmGroup(true).equals("TREE")){
                 p.setYAxisLabel("Time (μs)");
             }
             else{
                 p.setYAxisLabel("Time (ms)");
             }
             p.setXAxisLabel("Input Size");
-            resultChartPanel = new ResultsChartPanel(this.getTaskID());
+            resultChartPanel = new ResultsChartPanel(task.getTaskID());
             resultChartPanel.addResultChart(p.getLineChart());
             resultChartPanel.sethasAverage(p.hasAverage());
-            if(task.getAlgorithmGroup(true).equals("SEARCH")){
-                resultTablePanel = new ResultsTablePanel(response.toString(), this.getTaskID(), false,"(μs)");
+            if(task.getAlgorithmGroup(true).equals("SEARCH") || task.getAlgorithmGroup(true).equals("TREE") ){
+                resultTablePanel = new ResultsTablePanel(response.toString(), task.getTaskID(), false,"(μs)");
             }else{
-                resultTablePanel = new ResultsTablePanel(response.toString(), this.getTaskID(), false,"(ms)");
+                resultTablePanel = new ResultsTablePanel(response.toString(), task.getTaskID(), false,"(ms)");
             }
         }
         
@@ -313,7 +313,7 @@ public class TaskMaster implements Runnable, ITaskCompleteNotifier, Serializable
                         case "END":
                             break;
                         default:
-                            response.append(responseLine);
+                            response.append(responseLine.trim());
                             response.append("\n");
                             ++responseLineCount;
                             break;
