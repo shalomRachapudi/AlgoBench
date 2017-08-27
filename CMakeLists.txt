@@ -14,9 +14,9 @@ add_subdirectory(Backend)
 #           - AbsoluteLayout
 #           - beansbinding
 #           - xchart
-            - .
-            - .
-            - .
+#           - .
+#           - .
+#           - .
 #       - AlgoBench_GUI.jar
 #   - backEnd
 #       - AlgoBench_Backend
