@@ -84,24 +84,18 @@
         								<fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="scheduled-tasks"/></fo:block></fo:table-cell>
         							</fo:table-row>
 
-        							<!-- Completed Tasks -->
+        							<!-- Completed tasks -->
         							<fo:table-row>
         								<fo:table-cell padding-start="20.0pt"><fo:block>Completed Tasks:</fo:block></fo:table-cell>
         								<fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="completed-tasks"/></fo:block></fo:table-cell>
         							</fo:table-row>
 
-        							<!-- Percentage Completion -->
+        							<!-- QuickSort: Print if max-recursion-depth attribute exists -->
         							<fo:table-row>
-        								<fo:table-cell padding-start="20.0pt"><fo:block>Percentage Completion:</fo:block></fo:table-cell>
-        								<fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="percentage-completion"/></fo:block></fo:table-cell>
+        										<fo:table-cell padding-start="20.0pt"><fo:block>Max. Recursion Depth:</fo:block></fo:table-cell>
+        										<fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="max-recursion-depth"/></fo:block></fo:table-cell>
         							</fo:table-row>
-
-        							<!-- Max Recursion Depth -->
-        							<fo:table-row>
-        								<fo:table-cell padding-start="20.0pt"><fo:block>Max. Recursion Depth:</fo:block></fo:table-cell>
-        								<fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="max-recursion-depth"/></fo:block></fo:table-cell>
-        							</fo:table-row>
-
+        							
                                     <!-- empty line -->
         							<fo:table-row><fo:table-cell><fo:block><fo:leader /></fo:block></fo:table-cell></fo:table-row>
 
@@ -152,12 +146,12 @@
                                         <fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="input-distribution"/></fo:block></fo:table-cell>
                                     </fo:table-row>
 
-                                    <!-- Pivot Position -->
+                                    <!-- QuickSort: Print if pivot-position exists -->
                                     <fo:table-row>
-                                        <fo:table-cell padding-start="20.0pt"><fo:block>Pivot Position:</fo:block></fo:table-cell>
-                                        <fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="pivot-position"/></fo:block></fo:table-cell>
+                                        		<fo:table-cell padding-start="20.0pt"><fo:block>Pivot Position:</fo:block></fo:table-cell>
+                                        		<fo:table-cell padding-start="20.0pt"><fo:block><xsl:value-of select="pivot-position"/></fo:block></fo:table-cell>
                                     </fo:table-row>
-
+                                    
                                     <!-- empty line -->
         							<fo:table-row><fo:table-cell><fo:block><fo:leader /></fo:block></fo:table-cell></fo:table-row>
 
@@ -176,7 +170,7 @@
         <fo:block><fo:leader /></fo:block> <!-- empty line -->
         <!-- image -->
         <fo:block border-bottom-width="1.3pt" border-bottom-style="solid" border-bottom-color="#4c4cff">
-        	<fo:external-graphic src="images/LineChartquicksort_547.jpg" content-height="145mm" content-width="180mm" display-align="center" text-align="center" border="solid 0.1pt"/>
+        	<fo:external-graphic src="images/image.jpg" content-height="145mm" content-width="180mm" display-align="center" text-align="center" border="solid 0.1pt"/>
         </fo:block>
 
         <!-- Notes, if any -->
